@@ -1,0 +1,12 @@
+#target directories
+target/
+
+#ignore IntelliJ module files
+*.iml
+
+#ignore NetBeans files
+nbactions.xml
+nb-configuration.xml
+
+#ignore logs
+*.log
