@@ -41,31 +41,31 @@
 
 ##<a name="introduction"></a>Introduction
 Working with RDF mass data is often a prone job. Triplestores that can handle 
-mass data (let's say 2 Mio. statements) are rare, additionally typical 
+mass data (let's say 200 Mio. statements) are rare, additionally typical 
 operations like import and SPARQL queries are time consuming. A common solution 
 is to split available data corpusses into smaller handier parts and process the
 parts individually.
 
 In this context recurring tasks are extracting entities of a certain 
-class from a large dataset, or subdivide a dataset into block of a certain 
+class from a large dataset, or subdivide a dataset into blocks of a certain 
 property. Unfortunately organizing ones RDF mass data cannot be done easily 
 with available out-of-the-box tools. Also using a triplestore is often not
 suitable since SPARQL queries operate on graphs rather than packages of RDF 
 statements.
 
 This tool was developed to enable users of large RDF datasets to efficiently 
-organize their data without having to rely on triplestores but on dump file on
+organize their data without having to rely on triplestores but on dump files on
 the local HDD.
 
 
 ##<a name="sortedntriples"></a>Sorted N-Triples
 When there is an RDF dump file to process, users cannot take for granted that
 stored resources are held together. This is especially true for the N-Triple
-file format but also applies for RDF/XML file format that even provide a way to 
+file format but also applies for the RDF/XML file format that even provides a way to 
 cluster statement by syntax.
-At the same time resources within such files cannot be found efficienty without
-having to read-in the whole file and examine the stream to the end to find all
-occurences. Complex searches cannot be handlet at all.
+At the same time resources within such files cannot be found efficiently without
+having to read-in the whole file and examine the stream from the start to the end to find all
+occurences. Complex searches cannot be handled at all.
 
 To overcome these limitations this tool applies an intermediate file format to 
 be used by a given set of operations to organize data in a more flexible way.
