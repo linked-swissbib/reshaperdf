@@ -1,4 +1,4 @@
-package org.gesis.reshaperdf.cmld.separatelinks;
+package org.gesis.reshaperdf.cmd.separatelinks;
 
 import java.io.File;
 import java.io.FileInputStream;
