@@ -1,7 +1,9 @@
 package org.gesis.reshaperdf.utils.sort;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Comparator;
+import org.gesis.reshaperdf.utils.LineCounter;
 import org.gesis.reshaperdf.utils.StatementsComparatorSPO;
 import org.openrdf.model.Statement;
 
@@ -12,13 +14,14 @@ public class Sort {
     
     
     /**
-     * Sorts an NTriples file using merge sort.
-     * @param file The file to sort. This file is Overwritten by the sorted file.
+     * Sorts an NTriples inFile using merge sort.
+     * @param inFile The inFile to sort. This inFile is Overwritten by the sorted inFile.
+     * @param outFile The sorted file.
      * @throws InterruptedException 
      */
-    public static void sort(File file) throws InterruptedException{
+    public static void sort(File inFile, File outFile) throws InterruptedException, IOException{
     
-        //chose workspace
+        //create a workspace folder in user.home
         String userHome = System.getProperty("user.home");
         File userHomeDir = new File(userHome);
         String tmpDirName = String.valueOf(System.currentTimeMillis());
@@ -27,7 +30,8 @@ public class Sort {
     
         //start sorting
         Comparator<Statement> comparator = new StatementsComparatorSPO();
-        AsyncSplitMerge asm = new AsyncSplitMerge(file, workspace, comparator);
+        long fLength = LineCounter.countLines(inFile.getAbsolutePath());
+        AsyncSplitMerge asm = new AsyncSplitMerge(inFile, outFile, workspace, comparator, fLength, true);
         asm.start();
         asm.join();
        

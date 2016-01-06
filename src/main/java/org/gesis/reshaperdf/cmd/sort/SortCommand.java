@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
-import org.gesis.reshaperdf.utils.OSUtils;
 import org.gesis.reshaperdf.utils.sort.Sort;
 
 /**
@@ -20,7 +19,6 @@ public class SortCommand implements ICMD {
     public String NAME = "sort";
     public String EXPLANATION = "Sorts an NTriple file.";
     public String HELPTEXT = "Usage: sort <infile> <outfile>\nSorts an NTriple file.";
-    public int linesPerFile = 1000000;
 
     @Override
     public String getName() {
@@ -40,7 +38,7 @@ public class SortCommand implements ICMD {
     @Override
     public CommandExecutionResult execute(String[] args) throws CommandExecutionException {
         //check args
-        if (args.length != 2) {
+        if (args.length != 3) {
             return new CommandExecutionResult(false, "Invalid parameter count.");
         }
         File inFile = new File(args[1]);
@@ -48,9 +46,13 @@ public class SortCommand implements ICMD {
             return new CommandExecutionResult(false, "Input file is not a valid file.");
         }
         
+        File outFile = new File(args[2]);
+        
         try {
-            Sort.sort(inFile);
+            Sort.sort(inFile,outFile);
         } catch (InterruptedException ex) {
+            throw new CommandExecutionException(ex);
+        } catch (IOException ex) {
             throw new CommandExecutionException(ex);
         }
           
