@@ -11,7 +11,6 @@ import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
 import org.gesis.reshaperdf.utils.CheckedNTriplesWriter;
-import org.gesis.reshaperdf.utils.LineWriter;
 import org.gesis.reshaperdf.utils.ResourcePullReader;
 import org.gesis.reshaperdf.utils.StatementsComparatorO;
 import org.openrdf.model.Statement;
@@ -106,18 +105,20 @@ public class GetEnrichmentCommand implements ICMD {
             CheckedNTriplesWriter writer = new CheckedNTriplesWriter(new FileOutputStream(outFile), null);
             writer.startRDF();
 
+            int cnt = 0;
+            
             //get initial element of linklist
             int max = linkList.size();
             Statement link = linkList.get(0);
             String obj = link.getObject().stringValue();
             linkList.remove(0);
+            cnt++;
 
             //get initial element of resource file
             Statement[] res = rpReader.peek();
             rpReader.removeHead();
             String subj = res[0].getSubject().stringValue();
-
-            int cnt = 0;
+      
 
             //use data sets as queues, compare head at head. 
             //Use alphabetical order to determine if resources are not present
@@ -130,25 +131,26 @@ public class GetEnrichmentCommand implements ICMD {
 
                 //obj < subj
                 if (result < 0) {
-                    //ressource ist nicht auffindbar eine alphanum. groessere ist bereits da
-                    System.out.println("Resource not found: " + obj);
+                    //ressource could not be found, another alphanum. greater one is already present
+                    System.out.println("Resource #"+cnt+" not found: " + obj);
                     link = linkList.get(0);
                     obj = link.getObject().stringValue();
                     linkList.remove(0);
+                    cnt++;
                     continue;
                 } //obj == subj
                 else if (result == 0) {
-                    //ressource gefunden -> extrahieren
-                    cnt++;
-                    System.out.println("Found resource " + cnt + " of " + max);
+                    //ressource found -> extract
+                    System.out.println("Found resource #" + cnt + " of " + max);
                     writeAndMerge(writer, res, link.getSubject().stringValue());
                     link = linkList.get(0);
                     obj = link.getObject().stringValue();
                     linkList.remove(0);
+                    cnt++;
                     continue;
                 } //obj > subj
                 else if (result > 0) {
-                    //weitersuchen...
+                    //continue searching...
                     res = rpReader.peek();
                     rpReader.removeHead();
                     subj = res[0].getSubject().stringValue();

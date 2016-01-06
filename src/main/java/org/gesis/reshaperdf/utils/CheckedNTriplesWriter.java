@@ -48,7 +48,7 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
                 super.handleStatement(getExtStmt(st));
             } else {
                 //Message to System.out if a statements was sorted out.
-                System.out.println(filter.getLastCause()); 
+                //System.out.println(filter.getLastCause()); 
             }
         } else {
             super.handleStatement(getExtStmt(st));
