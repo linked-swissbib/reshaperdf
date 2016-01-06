@@ -7,6 +7,7 @@ import org.gesis.reshaperdf.cmd.boundary.ICMD;
 import org.gesis.reshaperdf.cmd.checksorting.CheckSortingCommand;
 import org.gesis.reshaperdf.cmd.correct.CorrectCommand;
 import org.gesis.reshaperdf.cmd.extractresources.ExtractResourcesCommand;
+import org.gesis.reshaperdf.cmd.filter.FilterCommand;
 import org.gesis.reshaperdf.cmd.getenrichment.GetEnrichmentCommand;
 import org.gesis.reshaperdf.cmd.merge.MergeCommand;
 import org.gesis.reshaperdf.cmd.mergedir.MergeDirCommand;
@@ -83,6 +84,7 @@ public class App {
         repo.add(new ExtractDuplicateLinksCommand());
         repo.add(new SubtractCommand());
         repo.add(new RenamePropertyCommand());
+        repo.add(new FilterCommand());
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list
