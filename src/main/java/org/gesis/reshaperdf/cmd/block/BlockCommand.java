@@ -87,11 +87,11 @@ public class BlockCommand implements ICMD {
                     String obj = res[i].getObject().stringValue();
                     if (obj.length() > 0) { //...process its object
                         char c = obj.charAt(0);
-                        //create a write for the first letters file or use an existing one
+                        //create a writer for the first letters file or use an existing one
                         RDFWriter writer = map.get(c);
                         if (writer == null) { 
                             int asInt = (int) c;
-                            String fileName = "u" + asInt + ".nt";
+                            String fileName = "u" + Integer.valueOf(String.valueOf(asInt), 16) + ".nt";
                             File file = new File(outputDir, fileName);
                             try {
                                 writer = new CheckedNTriplesWriter(new FileOutputStream(file, true), new StrictStatementFilter());
@@ -152,7 +152,7 @@ public class BlockCommand implements ICMD {
      */
     private static void furtherSplit(File inDir) throws IOException, FileNotFoundException, RDFHandlerException {
         long stmtsPerFile = 200000;
-        long resourcesPerFile = 100000;
+        long resourcesPerFile = 50000;
 
         ArrayList<File> fileList = findLongFiles(inDir, stmtsPerFile);
 
@@ -183,5 +183,9 @@ public class BlockCommand implements ICMD {
         }
         return fileList;
     }
+    
+    
+   
+    
 
 }

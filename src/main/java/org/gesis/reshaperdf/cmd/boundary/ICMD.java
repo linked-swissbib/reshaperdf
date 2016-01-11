@@ -9,6 +9,5 @@ public interface ICMD {
     public String getExplanation();
     public String getHelptext();
     public CommandExecutionResult execute(String[] args) throws CommandExecutionException;
-    public boolean finished = false;
     
 }

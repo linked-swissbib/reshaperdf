@@ -121,7 +121,7 @@ public class App {
      * @param args
      * @param repo 
      */
-    public static void handleHelp(String[] args, CommandRepository repo) {
+    private static void handleHelp(String[] args, CommandRepository repo) {
         if (args.length == 1) { 
             printHelp(repo); //print short description of every command
         } else if (args.length == 2) {
@@ -133,7 +133,7 @@ public class App {
      * Prints a short description of every command in the repository.
      * @param repo 
      */
-    public static void printHelp(CommandRepository repo) {
+    private static void printHelp(CommandRepository repo) {
         for (int i = 0; i < repo.size(); i++) {
             System.out.print(repo.get(i).getName());
             System.out.print("\t\t");
@@ -151,7 +151,7 @@ public class App {
      * @param repo
      * @param cmdName 
      */
-    public static void printHelp(CommandRepository repo, String cmdName) {
+    private static void printHelp(CommandRepository repo, String cmdName) {
         if (cmdName.equalsIgnoreCase(CMD_HELP)) { //if help for help is wanted
             System.out.println(CMD_HELP_TEXT);
         } else { //if help for any other cmd is wanted
@@ -169,7 +169,7 @@ public class App {
      * Prints a list of all commands in repo.
      * @param repo 
      */
-    public static void printCommandList(CommandRepository repo) {
+    private static void printCommandList(CommandRepository repo) {
         String[] arr = repo.getCommandList();
         for (int i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
@@ -181,7 +181,7 @@ public class App {
      * Prints and formats a usage error message.
      * @param message 
      */
-    public static void printUsageError(String message) {
+    private static void printUsageError(String message) {
         System.out.println("Usage error: " + message);
     }
 
@@ -189,7 +189,7 @@ public class App {
      * Prints and formats a system error message.
      * @param message 
      */
-    public static void printSystemError(String message) {
+    private static void printSystemError(String message) {
         System.out.println("Application error: " + message);
     }
 
