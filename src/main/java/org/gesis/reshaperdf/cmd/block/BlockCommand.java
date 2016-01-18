@@ -91,7 +91,7 @@ public class BlockCommand implements ICMD {
                         RDFWriter writer = map.get(c);
                         if (writer == null) { 
                             int asInt = (int) c;
-                            String fileName = "u" + Integer.valueOf(String.valueOf(asInt), 16) + ".nt";
+                            String fileName = "u" + Integer.toHexString(asInt).toUpperCase() + ".nt";
                             File file = new File(outputDir, fileName);
                             try {
                                 writer = new CheckedNTriplesWriter(new FileOutputStream(file, true), new StrictStatementFilter());
