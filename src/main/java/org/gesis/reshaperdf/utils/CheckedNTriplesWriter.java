@@ -111,8 +111,8 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
      * with '?' \uD800 - \uFFFF in plain text these are not valid in UTF-8 (only
      * in UTF-16) Source: https://de.wikipedia.org/wiki/UTF-8
      *
-     * @param s The String to examine.
-     * @return true if a surrogate character is present, false otherwise.
+     * @param s The String to examine
+     * @return The manipulated string
      */
     private static String replaceBadSequence(String s) {
 
