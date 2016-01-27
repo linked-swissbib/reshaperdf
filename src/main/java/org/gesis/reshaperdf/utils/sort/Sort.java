@@ -19,19 +19,21 @@ public class Sort {
      * @param outFile The sorted file.
      * @throws InterruptedException 
      */
-    public static void sort(File inFile, File outFile) throws InterruptedException, IOException{
+    public static void sort(File inFile, File outFile, Thread.UncaughtExceptionHandler uncaughtExceptionHandler) throws InterruptedException, IOException{
     
         //create a workspace folder in user.home
-        String userHome = System.getProperty("user.home");
+        String userHome = ".";//System.getProperty("user.home");
         File userHomeDir = new File(userHome);
         String tmpDirName = String.valueOf(System.currentTimeMillis());
         File workspace = new File(userHomeDir, tmpDirName);
         workspace.mkdir();
+        System.out.println("Using "+workspace.getAbsolutePath()+ " as workspace.");
     
         //start sorting
         Comparator<Statement> comparator = new StatementsComparatorSPO();
         long fLength = LineCounter.countLines(inFile.getAbsolutePath());
-        AsyncSplitMerge asm = new AsyncSplitMerge(inFile, outFile, workspace, comparator, fLength, true);
+        
+        AsyncSplitMerge asm = new AsyncSplitMerge(inFile, outFile, workspace, comparator, fLength, true, uncaughtExceptionHandler);
         asm.start();
         asm.join();
        
@@ -51,4 +53,6 @@ public class Sort {
         }
         dir.delete();
     }
+
+    
 }

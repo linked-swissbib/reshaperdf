@@ -38,7 +38,6 @@ public class AsyncSplitMerge extends Thread {
     private Comparator<Statement> comparator = null;
     private long fLength = -1;
     private boolean topLevel = false;
-    
 
     /**
      * Ctor
@@ -49,7 +48,7 @@ public class AsyncSplitMerge extends Thread {
      * @param comparator A comparator implementation for statements.
      * @param fLength The line count of the file to sort.
      */
-    public AsyncSplitMerge(File inFile, File outFile, File workspace, Comparator<Statement> comparator, long fLength, boolean topLevel) {
+    public AsyncSplitMerge(File inFile, File outFile, File workspace, Comparator<Statement> comparator, long fLength, boolean topLevel, UncaughtExceptionHandler uncaughtExceptionHandler) {
         this.inFile = inFile;
         this.outFile = outFile;
         this.workspace = workspace;
@@ -57,7 +56,7 @@ public class AsyncSplitMerge extends Thread {
         this.fLength = fLength;
         this.topLevel = topLevel;
         this.setName("SplitMerge thread for " + inFile.getName());
-
+        this.setUncaughtExceptionHandler(uncaughtExceptionHandler);
     }
 
     /**
@@ -83,10 +82,10 @@ public class AsyncSplitMerge extends Thread {
                 }
                 System.out.println("Thread 4 " + inFile.getName() + " finished splitting.");
                 //recursive call for inFile A
-                AsyncSplitMerge tA = new AsyncSplitMerge(fileA, fileA, workspace, comparator, fLength / 2, false);
+                AsyncSplitMerge tA = new AsyncSplitMerge(fileA, fileA, workspace, comparator, fLength / 2, false, this.getUncaughtExceptionHandler());
                 tA.start();
                 //recursive call for inFile B
-                AsyncSplitMerge tB = new AsyncSplitMerge(fileB, fileB, workspace, comparator, fLength / 2, false);
+                AsyncSplitMerge tB = new AsyncSplitMerge(fileB, fileB, workspace, comparator, fLength / 2, false, this.getUncaughtExceptionHandler());
                 tB.start();
                 //wait for both
                 tA.join();
@@ -99,7 +98,7 @@ public class AsyncSplitMerge extends Thread {
                 System.out.println("Thread 4 " + inFile.getName() + " finished merging.");
             } else {
                 //sort when the inFile is <= 2 000 000 statements
-                //reduce access to sorting in order to memory
+                //reduce access to sorting in order to save memory
                 semaphore.acquire();
                 System.out.println("Thread 4 " + inFile.getName() + " started sorting.");
                 sort(inFile, outFile, comparator);
@@ -161,7 +160,9 @@ public class AsyncSplitMerge extends Thread {
             list = new ArrayList<Statement>();
             rdfParser.setRDFHandler(new StatementCollector(list));
             rdfParser.getParserConfig().addNonFatalError(NTriplesParserSettings.FAIL_ON_NTRIPLES_INVALID_LINES);
-            rdfParser.parse(new FileInputStream(inFile), "");
+            FileInputStream fis = new FileInputStream(inFile);
+            rdfParser.parse(fis, "");
+            fis.close();
             Collections.sort(list, comparator);
 
             OutputStream out = new FileOutputStream(outFile);
@@ -198,7 +199,8 @@ public class AsyncSplitMerge extends Thread {
         NTriplesWriter writer;
         try {
             //use a special writer that only writes valid triples.
-            writer = new CheckedNTriplesWriter(new FileOutputStream(file), null);
+            FileOutputStream fos = new FileOutputStream(file);
+            writer = new CheckedNTriplesWriter(fos, null);
             writer.startRDF();
 
             Statement a = readerA.peek();
@@ -243,9 +245,7 @@ public class AsyncSplitMerge extends Thread {
                 readerB.removeHead();
             }
             writer.endRDF();
-
-            fileA.delete();
-            fileB.delete();
+            fos.close();
         } catch (IOException ex) {
             System.err.println(ex);
         } catch (RDFHandlerException ex) {

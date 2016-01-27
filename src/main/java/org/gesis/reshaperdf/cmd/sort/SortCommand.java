@@ -14,7 +14,7 @@ import org.gesis.reshaperdf.utils.sort.Sort;
  * files. These smaller files are sorted separately by a threads as soon as they
  * fully written. After each file is sorted, the files are remerged.
  */
-public class SortCommand implements ICMD {
+public class SortCommand implements ICMD, Thread.UncaughtExceptionHandler {
 
     public String NAME = "sort";
     public String EXPLANATION = "Sorts an NTriple file.";
@@ -49,7 +49,7 @@ public class SortCommand implements ICMD {
         File outFile = new File(args[2]);
         
         try {
-            Sort.sort(inFile,outFile);
+            Sort.sort(inFile,outFile,this);
         } catch (InterruptedException ex) {
             throw new CommandExecutionException(ex);
         } catch (IOException ex) {
@@ -59,5 +59,11 @@ public class SortCommand implements ICMD {
         return new CommandExecutionResult(true);
     }
 
+    @Override
+    public void uncaughtException(Thread t, Throwable e) {
+        System.err.println("Error in thread "+ t.getName()+": "+ e.getMessage());
+        System.exit(-2);
+    }
     
+
 }
