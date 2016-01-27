@@ -95,7 +95,7 @@ public class App {
                 ICMD cmd = repo.getCommand(args[0]);
                 if (cmd == null) {
                     printUsageError("No such command.");
-                    System.exit(0);
+                    System.exit(-1);
                 }
                 try { //execute the command
                     CommandExecutionResult result = cmd.execute(args);
