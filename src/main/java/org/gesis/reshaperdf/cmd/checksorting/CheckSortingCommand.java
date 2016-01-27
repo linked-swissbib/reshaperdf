@@ -64,7 +64,7 @@ public class CheckSortingCommand implements ICMD {
         pullReader.removeHead();
         Comparator<Statement> comparator = new StatementsComparatorSPO();
         while (curr != null) {
-            if (comparator.compare(last, curr) >= 0) {
+            if (comparator.compare(last, curr) > 0) {
                 System.out.println("Not sorted");
                 System.out.println("Last line=" + last);
                 System.out.println("Cur. line=" + curr);
