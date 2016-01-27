@@ -55,7 +55,6 @@ public class CorrectCommand implements ICMD {
             String line = br.readLine();
             BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outFile), "UTF-8"));
 
-            String lastLine = "";
             while (line != null) {
                 boolean drop = false;
 
