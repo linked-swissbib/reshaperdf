@@ -1,5 +1,6 @@
 package org.gesis.reshaperdf;
 
+import org.gesis.reshaperdf.cmd.analyzeproperty.AnalyzeTypeCommand;
 import org.gesis.reshaperdf.cmd.block.BlockCommand;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
@@ -85,6 +86,7 @@ public class App {
         repo.add(new SubtractCommand());
         repo.add(new RenamePropertyCommand());
         repo.add(new FilterCommand());
+        repo.add(new AnalyzeTypeCommand());
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list
