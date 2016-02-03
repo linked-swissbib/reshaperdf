@@ -70,8 +70,7 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
             obj = NSResolver.getInstance().blowUp(st.getObject().stringValue());
             return new StatementImpl(new URIImpl(subj), new URIImpl(pred), new URIImpl(obj));
         } else {
-            obj = st.getObject().stringValue();
-            return new StatementImpl(new URIImpl(subj), new URIImpl(pred), new LiteralImpl(obj));
+            return new StatementImpl(new URIImpl(subj), new URIImpl(pred), st.getObject());
         }
 
     }
