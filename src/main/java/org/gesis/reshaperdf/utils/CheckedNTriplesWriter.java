@@ -1,10 +1,11 @@
 package org.gesis.reshaperdf.utils;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
-import org.openrdf.model.Literal;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
-import org.openrdf.model.impl.LiteralImpl;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
@@ -17,7 +18,7 @@ import org.openrdf.rio.ntriples.NTriplesWriter;
 public class CheckedNTriplesWriter extends NTriplesWriter {
 
     private IStatementFilter filter = null;
-
+    
     /**
      * Ctor
      *
@@ -25,10 +26,12 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
      * @param filter A specialized filter to check statemenst for validity. Use
      * null if no filtering is to be applied.
      */
-    public CheckedNTriplesWriter(OutputStream out, IStatementFilter filter) {
+    public CheckedNTriplesWriter(OutputStream out, IStatementFilter filter) throws FileNotFoundException {
         super(out);
         this.filter = filter;
     }
+    
+    
 
     /**
      * Processes the statements. Filters invalid statements. Statements that
@@ -134,5 +137,7 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
         return str;
 
     }
+    
+    
 
 }
