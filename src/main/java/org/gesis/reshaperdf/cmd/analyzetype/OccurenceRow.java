@@ -1,4 +1,4 @@
-package org.gesis.reshaperdf.cmd.analyzeproperty;
+package org.gesis.reshaperdf.cmd.analyzetype;
 
 /**
  *

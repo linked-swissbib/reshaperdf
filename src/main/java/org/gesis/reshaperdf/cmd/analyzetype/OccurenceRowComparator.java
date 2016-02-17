@@ -3,7 +3,7 @@
  * To change o1 template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.gesis.reshaperdf.cmd.analyzeproperty;
+package org.gesis.reshaperdf.cmd.analyzetype;
 
 import java.util.Comparator;
 

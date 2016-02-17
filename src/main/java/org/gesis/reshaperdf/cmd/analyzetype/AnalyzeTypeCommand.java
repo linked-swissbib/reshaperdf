@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.gesis.reshaperdf.cmd.analyzeproperty;
+package org.gesis.reshaperdf.cmd.analyzetype;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,9 +86,9 @@ public class AnalyzeTypeCommand implements ICMD, IResourceHandler {
 
         this.tables = new OccurrenceTable[predicateArr.length];
         for (int i = 0; i < predicateArr.length; i++) {
-            tables[i] = new OccurrenceTable(new String[]{predicateArr[i]},"table_"+i);
+            tables[i] = new OccurrenceTable(this.type,new String[]{predicateArr[i]},"table_"+i);
         }
-        this.combiTable = new OccurrenceTable(predicateArr,"combi_table");
+        this.combiTable = new OccurrenceTable(this.type,predicateArr,"combi_table");
 
         ResourceReader rReader = new ResourceReader();
         rReader.setResourceHandler(this);
@@ -107,9 +107,10 @@ public class AnalyzeTypeCommand implements ICMD, IResourceHandler {
 
         try {
             for (int i = 0; i < tables.length; i++) {
+                List<OccurenceRow> sortedList = tables[i].toSortedList(false);
                 File file = new File(tables[i].getName()+".csv");
                 System.out.println("Writing table " + i +" to "+file.getAbsolutePath());
-                tables[i].write2File(file);
+                tables[i].write2File(file, sortedList);
             }
             List<OccurenceRow> sortedList = combiTable.toSortedList(false);
             File file = new File(combiTable.getName()+".csv");

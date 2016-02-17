@@ -1,6 +1,6 @@
 package org.gesis.reshaperdf;
 
-import org.gesis.reshaperdf.cmd.analyzeproperty.AnalyzeTypeCommand;
+import org.gesis.reshaperdf.cmd.analyzetype.AnalyzeTypeCommand;
 import org.gesis.reshaperdf.cmd.block.BlockCommand;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
@@ -13,6 +13,7 @@ import org.gesis.reshaperdf.cmd.getenrichment.GetEnrichmentCommand;
 import org.gesis.reshaperdf.cmd.merge.MergeCommand;
 import org.gesis.reshaperdf.cmd.mergedir.MergeDirCommand;
 import org.gesis.reshaperdf.cmd.ntriplify.NTriplifyCommand;
+import org.gesis.reshaperdf.cmd.pigeonhole.PigeonholeCommand;
 import org.gesis.reshaperdf.cmd.pumpup.PumpupCommand;
 import org.gesis.reshaperdf.cmd.removeduplicates.RemoveDuplicatesCommand;
 import org.gesis.reshaperdf.cmd.renameproperty.RenamePropertyCommand;
@@ -87,6 +88,7 @@ public class App {
         repo.add(new RenamePropertyCommand());
         repo.add(new FilterCommand());
         repo.add(new AnalyzeTypeCommand());
+        repo.add(new PigeonholeCommand());
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list

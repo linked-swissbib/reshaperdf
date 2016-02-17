@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.gesis.reshaperdf.cmd.analyzeproperty;
+package org.gesis.reshaperdf.cmd.analyzetype;
 
 import com.opencsv.CSVWriter;
 import java.io.File;
@@ -25,11 +25,12 @@ public class OccurrenceTable {
     private Map<String, OccurenceRow> map = null;
     private String name = null;
     private String[] predicateArr = null;
-    
+    private String type = null;
    
 
-    public OccurrenceTable(String[] predicateArr, String name) {
+    public OccurrenceTable(String type, String[] predicateArr, String name) {
         map = new TreeMap<String, OccurenceRow>();
+        this.type = type;
         this.name = name;
         this.predicateArr = predicateArr;
     }
@@ -73,6 +74,8 @@ public class OccurrenceTable {
         FileOutputStream fos = new FileOutputStream(file); 
         OutputStreamWriter osw = new OutputStreamWriter(fos, "UTF-8");
         CSVWriter writer = new CSVWriter(osw,';', '"', '\\', "\n");
+        writer.writeNext(new String[]{this.type});
+        writer.writeNext(predicateArr);
         String[] nextLine = new String[predicateArr.length + 2]; //+2 for total and alternatives
         for(int i=0; i<list.size();i++){
             OccurenceRow row = list.get(i);
