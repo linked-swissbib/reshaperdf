@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
@@ -29,10 +31,10 @@ public class BlockCommand implements ICMD {
     private String EXPLANATION = "Separates the input data according to its literals alphabetic order.";
     private String HELPTEXT = "Usage: " + NAME + " <infile> <outputdir> <predicate> \n" + EXPLANATION;
 
-    private Map<Character, RDFWriter> map = null;
+    private Map<Character, File> map = null;
 
     public BlockCommand() {
-        map = new HashMap<Character, RDFWriter>();
+        map = new HashMap<Character, File>();
     }
 
     @Override
@@ -88,22 +90,19 @@ public class BlockCommand implements ICMD {
                     if (obj.length() > 0) { //...process its object
                         char c = obj.charAt(0);
                         //create a writer for the first letters file or use an existing one
-                        RDFWriter writer = map.get(c);
-                        if (writer == null) { 
+                        File file = map.get(c);
+                        if (file == null) { 
                             int asInt = (int) c;
                             String fileName = "u" + Integer.toHexString(asInt).toUpperCase() + ".nt";
-                            File file = new File(outputDir, fileName);
-                            try {
-                                writer = new CheckedNTriplesWriter(new FileOutputStream(file, true), new StrictStatementFilter());
-                                map.put(c, writer);
-                            } catch (FileNotFoundException ex) {
-                                throw new CommandExecutionException(ex);
-                            }
+                            file = new File(outputDir, fileName);
+                            map.put(c, file);
                         }
                         //write the whole resource each time a propterty was found
                         try {
-                            writeResource(res, writer);
+                            writeResource(res, file);
                         } catch (RDFHandlerException ex) {
+                            throw new CommandExecutionException(ex);
+                        } catch (IOException ex) {
                             throw new CommandExecutionException(ex);
                         }
 
@@ -134,12 +133,15 @@ public class BlockCommand implements ICMD {
      * @param writer
      * @throws RDFHandlerException 
      */
-    private static void writeResource(Statement[] res, RDFWriter writer) throws RDFHandlerException {
+    private static void writeResource(Statement[] res, File file) throws RDFHandlerException, FileNotFoundException, IOException {
+        FileOutputStream fos = new FileOutputStream(file, true);
+        CheckedNTriplesWriter writer = new CheckedNTriplesWriter(fos, new StrictStatementFilter());
         writer.startRDF();
         for (int i = 0; i < res.length; i++) {
             writer.handleStatement(res[i]);
         }
         writer.endRDF();
+        fos.close();
     }
 
    
