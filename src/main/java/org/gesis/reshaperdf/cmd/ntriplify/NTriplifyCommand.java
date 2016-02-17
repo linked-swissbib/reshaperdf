@@ -18,6 +18,7 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.NTriplesParserSettings;
+import org.openrdf.rio.jsonld.JSONLDParser;
 import org.openrdf.rio.ntriples.NTriplesParser;
 
 /**
@@ -69,7 +70,7 @@ public class NTriplifyCommand implements ICMD {
         //xml, rdf, nt, jsonld
         File[] inputFiles = FileFinder.findFiles(inDir, new String[]{"xml", "rdf", "nt", "jsonld"});
 
-        //use special N-Triples writer that only writes valid NTriples and drops invalid
+        //use special N-Triples writer that only writes valid N-Triples and drops invalid
         RDFWriter ntriplesWriter = null;
         try {
             ntriplesWriter = new CheckedNTriplesWriter(new FileOutputStream(outFile), new StrictStatementFilter());
