@@ -84,6 +84,11 @@
 
     <dependencies>
         <dependency>
+            <groupId>com.github.jsonld-java</groupId>
+            <artifactId>jsonld-java</artifactId>
+            <version>0.8.2</version>
+        </dependency>
+        <dependency>
             <groupId>org.openrdf.sesame</groupId>
             <artifactId>sesame-rio-ntriples</artifactId>
             <version>${sesame.version}</version>
@@ -128,7 +133,7 @@
             <artifactId>opencsv</artifactId>
             <version>3.7</version>
         </dependency>
-
+        
     </dependencies>
     
 </project>

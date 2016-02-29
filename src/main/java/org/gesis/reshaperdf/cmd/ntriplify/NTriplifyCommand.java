@@ -1,5 +1,7 @@
 package org.gesis.reshaperdf.cmd.ntriplify;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.github.jsonldjava.core.JsonLdError;
 import org.gesis.reshaperdf.utils.FileFinder;
 import org.gesis.reshaperdf.utils.CheckedNTriplesWriter;
 import java.io.File;
@@ -7,6 +9,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
@@ -18,8 +24,6 @@ import org.openrdf.rio.RDFParser;
 import org.openrdf.rio.RDFWriter;
 import org.openrdf.rio.Rio;
 import org.openrdf.rio.helpers.NTriplesParserSettings;
-import org.openrdf.rio.jsonld.JSONLDParser;
-import org.openrdf.rio.ntriples.NTriplesParser;
 
 /**
  * Takes an input directory and merges all RDF files into an (unsorted) NTriples
@@ -29,7 +33,7 @@ public class NTriplifyCommand implements ICMD {
 
     public String NAME = "ntriplify";
     public String EXPLANATION = "Takes an input directory and merges all RDF files into an NTriples file.";
-    public String HELPTEXT = "Usage: ntriplify <input dir> <outfile>\nTakes an input directory and merges all RDF files into an NTriples file.";
+    public String HELPTEXT = "Usage: ntriplify <input dir> <outfile> [JSON-LD context]\nTakes an input directory and merges all RDF files into an NTriples file.";
 
     @Override
     public String getName() {
@@ -57,7 +61,7 @@ public class NTriplifyCommand implements ICMD {
     @Override
     public CommandExecutionResult execute(String[] args) throws CommandExecutionException {
         //check args
-        if (args.length != 3) {
+        if (args.length < 3 || args.length % 2 == 0) {
             return new CommandExecutionResult(false, "Invalid parameter count.");
         }
         File inDir = new File(args[1]);
@@ -65,6 +69,17 @@ public class NTriplifyCommand implements ICMD {
             return new CommandExecutionResult(false, "Input dir is not a valid directory.");
         }
         File outFile = new File(args[2]);
+
+        int off = 3;
+        int x = args.length - off;
+        Map<String, File> map = new HashMap<String, File>();
+        for (int i = 0; i < x / 2; i += 2) {
+            File contextFile = new File(args[off + i + 1]);
+            if (!contextFile.exists() || !contextFile.isFile()) {
+                return new CommandExecutionResult(false, "Context file " + contextFile.getName() + " is not a valid file.");
+            }
+            map.put(args[off + i], contextFile);
+        }
 
         //search in the given directory and its subdirectories for files with the extensions
         //xml, rdf, nt, jsonld
@@ -74,21 +89,35 @@ public class NTriplifyCommand implements ICMD {
         RDFWriter ntriplesWriter = null;
         try {
             ntriplesWriter = new CheckedNTriplesWriter(new FileOutputStream(outFile), new StrictStatementFilter());
+
         } catch (FileNotFoundException ex) {
             return new CommandExecutionResult(false, "Out file " + outFile.getAbsolutePath() + " was not found.");
         }
-
         for (int i = 0; i < inputFiles.length; i++) {
             System.out.println("#" + (i + 1) + " Processing " + inputFiles[i].getName());
             RDFFormat format = Rio.getParserFormatForFileName(inputFiles[i].getAbsolutePath());
-            RDFParser rdfParser = Rio.createParser(format);
-            // link our parser to our writer...
-            rdfParser.setRDFHandler(ntriplesWriter);
-            // set tollerance towards uncool ntriples
-            rdfParser.getParserConfig().addNonFatalError(NTriplesParserSettings.FAIL_ON_NTRIPLES_INVALID_LINES);
-            // ...and start the conversion!
+
             try {
-                rdfParser.parse(new FileInputStream(inputFiles[i]), "");
+                if (format.equals(RDFFormat.RDFXML) || format.equals(RDFFormat.NTRIPLES)) {
+                    RDFParser rdfParser = Rio.createParser(format);
+                    // link our parser to our writer...
+                    rdfParser.setRDFHandler(ntriplesWriter);
+                    // set tollerance towards uncool ntriples
+                    rdfParser.getParserConfig().addNonFatalError(NTriplesParserSettings.FAIL_ON_NTRIPLES_INVALID_LINES);
+                    // ...and start the conversion!
+                    FileInputStream fis = new FileInputStream(inputFiles[i]);
+                    rdfParser.parse(fis, "");
+                    fis.close();
+                } else if (format.equals(RDFFormat.JSONLD)) {
+                    org.gesis.reshaperdf.utils.jsonldparser.JSONLDParser rdfParser = new org.gesis.reshaperdf.utils.jsonldparser.JSONLDParser();
+                    rdfParser.setRdfHandler(ntriplesWriter);
+                    FileInputStream fis = new FileInputStream(inputFiles[i]);
+                    rdfParser.parse(fis, map);
+                    fis.close();
+                }
+            } catch (JsonParseException ex) {
+                System.err.println("File: " + inputFiles[i] + " " + ex.getMessage());
+                closeWriter(ntriplesWriter);
             } catch (RDFHandlerException ex) {
                 return new CommandExecutionResult(false, ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
             } catch (FileNotFoundException ex) {
@@ -96,16 +125,24 @@ public class NTriplifyCommand implements ICMD {
             } catch (IOException ex) {
                 return new CommandExecutionResult(false, ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
             } catch (RDFParseException ex) {
-                System.out.println("File: " + inputFiles[i] + " " + ex.getMessage());
-                try {
-                    ntriplesWriter.endRDF();
-                } catch (RDFHandlerException ex1) {
-                    return new CommandExecutionResult(false, ex1 + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
-                }
-            }
+                System.err.println("File: " + inputFiles[i] + " " + ex.getMessage());
+                closeWriter(ntriplesWriter);
+            } catch (JsonLdError ex) {
+                System.err.println("File: " + inputFiles[i] + " " + ex.getMessage());
+                closeWriter(ntriplesWriter);
+            } 
+
         }
         System.out.println("Done");
         return new CommandExecutionResult(true);
+    }
+
+    private static void closeWriter(RDFWriter writer) {
+        try {
+            writer.endRDF();
+        } catch (RDFHandlerException ex) {
+            System.err.println("Error on closing writer: "+ex);
+        }
     }
 
 }
