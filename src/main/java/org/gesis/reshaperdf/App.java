@@ -7,12 +7,14 @@ import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
 import org.gesis.reshaperdf.cmd.checksorting.CheckSortingCommand;
 import org.gesis.reshaperdf.cmd.correct.CorrectCommand;
+import org.gesis.reshaperdf.cmd.extractreferenced.ExtractReferencedCommand;
 import org.gesis.reshaperdf.cmd.extractresources.ExtractResourcesCommand;
 import org.gesis.reshaperdf.cmd.filter.FilterCommand;
 import org.gesis.reshaperdf.cmd.getenrichment.GetEnrichmentCommand;
 import org.gesis.reshaperdf.cmd.merge.MergeCommand;
 import org.gesis.reshaperdf.cmd.mergedir.MergeDirCommand;
 import org.gesis.reshaperdf.cmd.ntriplify.NTriplifyCommand;
+import org.gesis.reshaperdf.cmd.outline.OutlineCommand;
 import org.gesis.reshaperdf.cmd.pigeonhole.PigeonholeCommand;
 import org.gesis.reshaperdf.cmd.pumpup.PumpupCommand;
 import org.gesis.reshaperdf.cmd.removeduplicates.RemoveDuplicatesCommand;
@@ -89,6 +91,8 @@ public class App {
         repo.add(new FilterCommand());
         repo.add(new AnalyzeTypeCommand());
         repo.add(new PigeonholeCommand());
+        repo.add(new ExtractReferencedCommand());
+        repo.add(new OutlineCommand());
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list
