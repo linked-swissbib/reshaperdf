@@ -84,6 +84,7 @@ public class PullReader {
 
                 try {
                     parser.parse(new FileInputStream(file), "");
+                    fileFinished=true;
                 } catch (IOException ex) {
                     System.err.println(ex);
                 } catch (RDFParseException ex) {
@@ -126,9 +127,11 @@ public class PullReader {
     public void removeHead() {
         //uses a workaround to compensate that there is no blocking peek method in the queue
         try {
-            current = queue.poll(5, TimeUnit.SECONDS);
+            current = queue.poll(60, TimeUnit.SECONDS);
             if (current == null && !fileFinished) {
                 System.err.println("Unable to retrieve statement from pull reader " + file.getAbsolutePath());
+                System.err.println(current);
+                System.err.println(fileFinished);
                 System.exit(-1);
             }
         } catch (InterruptedException ex) {

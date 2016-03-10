@@ -19,6 +19,7 @@ import org.gesis.reshaperdf.cmd.pigeonhole.PigeonholeCommand;
 import org.gesis.reshaperdf.cmd.pumpup.PumpupCommand;
 import org.gesis.reshaperdf.cmd.removeduplicates.RemoveDuplicatesCommand;
 import org.gesis.reshaperdf.cmd.renameproperty.RenamePropertyCommand;
+import org.gesis.reshaperdf.cmd.securelooseends.SecureLooseEndsCommand;
 import org.gesis.reshaperdf.cmd.sort.SortCommand;
 import org.gesis.reshaperdf.cmd.split.SplitCommand;
 import org.gesis.reshaperdf.cmd.substract.SubtractCommand;
@@ -93,6 +94,7 @@ public class App {
         repo.add(new PigeonholeCommand());
         repo.add(new ExtractReferencedCommand());
         repo.add(new OutlineCommand());
+        repo.add(new SecureLooseEndsCommand());
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list

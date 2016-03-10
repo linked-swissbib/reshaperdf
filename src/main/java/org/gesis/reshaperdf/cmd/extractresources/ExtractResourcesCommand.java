@@ -22,7 +22,7 @@ public class ExtractResourcesCommand implements ICMD {
     private static final String WILDCARD = "?";
     private static final String NAME = "extractresources";
     private static final String EXPLANATION = "Extracts resources with a given predicate-object combination. Wildcard=" + WILDCARD + ".";
-    private static final String HELPTEXT = "Usage: extract <infile> <outfile> <predicate> <object> <offset> <length>\n" + EXPLANATION;
+    private static final String HELPTEXT = "Usage: "+NAME+" <infile> <outfile> <predicate> <object> <offset> <length>\n" + EXPLANATION;
 
     @Override
     public String getName() {
