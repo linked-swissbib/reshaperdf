@@ -17,3 +17,7 @@ schema https://schema.org/
 skos http://www.w3.org/2004/02/skos/core#
 void http://rdfs.org/ns/void#
 sch http://schema.org/
+schema http://schema.org/
+gesis http://gws.gesis.org/
+xml http://www.w3.org/XML/1998/namespace
+xsd http://www.w3.org/2001/XMLSchema#
