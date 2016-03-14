@@ -83,7 +83,7 @@ public class NTriplifyCommand implements ICMD {
 
         //search in the given directory and its subdirectories for files with the extensions
         //xml, rdf, nt, jsonld
-        File[] inputFiles = FileFinder.findFiles(inDir, new String[]{"xml", "rdf", "nt", "jsonld"});
+        File[] inputFiles = FileFinder.findFiles(inDir, new String[]{"xml", "rdf", "nt", "jsonld", "ttl"});
 
         //use special N-Triples writer that only writes valid N-Triples and drops invalid
         RDFWriter ntriplesWriter = null;
