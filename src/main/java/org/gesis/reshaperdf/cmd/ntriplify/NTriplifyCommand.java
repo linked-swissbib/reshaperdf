@@ -98,7 +98,7 @@ public class NTriplifyCommand implements ICMD {
             RDFFormat format = Rio.getParserFormatForFileName(inputFiles[i].getAbsolutePath());
 
             try {
-                if (format.equals(RDFFormat.RDFXML) || format.equals(RDFFormat.NTRIPLES)) {
+                if (format.equals(RDFFormat.RDFXML) || format.equals(RDFFormat.NTRIPLES) || format.equals(RDFFormat.TURTLE)) {
                     RDFParser rdfParser = Rio.createParser(format);
                     // link our parser to our writer...
                     rdfParser.setRDFHandler(ntriplesWriter);
