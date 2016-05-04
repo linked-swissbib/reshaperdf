@@ -65,7 +65,11 @@ public class MyJsonLDTripleCallback implements JsonLdTripleCallback {
                     o = new BNodeImpl(object.getValue());
                 } else {
                     String lang = object.getLanguage();
-                    String dtype = object.getDatatype();
+                    String tmp_dtype = object.getDatatype();
+                    URI dtype = null;
+                    if(tmp_dtype != null){
+                        dtype = new URIImpl(tmp_dtype);
+                    }
                     String label = object.getValue();
                     if (lang == null && dtype != null) {
                         o = new LiteralImpl(label, dtype);
