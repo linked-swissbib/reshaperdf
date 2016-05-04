@@ -15,8 +15,7 @@
     
 
     <organization>
-        <!-- Used as the 'Vendor' for JNLP generation -->
-        <name>Gesis</name>
+        <name>GESIS</name>
     </organization>
 
     <build>

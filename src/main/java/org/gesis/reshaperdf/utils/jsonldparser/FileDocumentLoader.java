@@ -1,7 +1,19 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2016 GESIS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, see 
+ * http://www.gnu.org/licenses/ .
  */
 package org.gesis.reshaperdf.utils.jsonldparser;
 
@@ -18,8 +30,9 @@ import java.net.URL;
 import java.util.Map;
 
 /**
- *
- * @author bensmafx
+ * Extension of DocumentLoader needed to use a JSON-LD context from an 
+ * external document.
+ * @author Felix Bensmann
  */
 public class FileDocumentLoader extends DocumentLoader {
 
@@ -30,22 +43,6 @@ public class FileDocumentLoader extends DocumentLoader {
         this.map = map;
     }
 
-//    @Override
-//    public RemoteDocument loadDocument(String url) throws JsonLdError {
-//        String disallowRemote = System.getProperty(DocumentLoader.DISALLOW_REMOTE_CONTEXT_LOADING);
-//
-//        if ("true".equalsIgnoreCase(disallowRemote)) {
-//            throw new JsonLdError(JsonLdError.Error.LOADING_REMOTE_CONTEXT_FAILED, url);
-//        }
-//
-//        final RemoteDocument doc = new RemoteDocument(url, null);
-//        try {
-//            doc.setDocument(fromURL(new URL(url)));
-//        } catch (final Exception e) {
-//            throw new JsonLdError(JsonLdError.Error.LOADING_REMOTE_CONTEXT_FAILED, url);
-//        }
-//        return doc;
-//    }
 
     @Override
     public Object fromURL(java.net.URL url) throws JsonParseException, IOException {

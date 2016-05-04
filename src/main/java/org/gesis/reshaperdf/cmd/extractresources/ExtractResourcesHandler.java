@@ -1,3 +1,20 @@
+/*
+ * Copyright (C) 2016 GESIS.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 3.0 of the License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this program; if not, see 
+ * http://www.gnu.org/licenses/ .
+ */
 package org.gesis.reshaperdf.cmd.extractresources;
 
 import java.io.File;
@@ -9,6 +26,7 @@ import org.openrdf.model.Statement;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
+ * @author Felix Bensmann
  * A handler for a ResourceRader. It implements a resource extranction process.
  * Resources are sent to it one by one. The handler compares them to its
  * matching criteria an copys matching resources to a specified file.
