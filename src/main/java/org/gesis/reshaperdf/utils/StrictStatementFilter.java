@@ -1,5 +1,6 @@
 package org.gesis.reshaperdf.utils;
 
+import com.github.jsonldjava.core.RDFDataset;
 import java.net.MalformedURLException;
 import java.net.URL;
 import org.openrdf.model.Statement;
@@ -8,44 +9,42 @@ import org.openrdf.model.URI;
 /**
  * A filter that identifies statements that use invalid character sequences.
  */
-public class StrictStatementFilter implements IStatementFilter{
+public class StrictStatementFilter implements IStatementFilter {
 
     private String lastCause = "Undefined";
-    
-    public StrictStatementFilter(){
-        
+
+    public StrictStatementFilter() {
+
     }
-    
+
     @Override
     public boolean accept(Statement stmt) {
-        try {
-            new URL(stmt.getSubject().stringValue());
-        } catch (MalformedURLException ex) {
-            lastCause = "Dropped statement " + stmt.toString() + " due to invalid format in subject.";
-            return false;
+        if ( !(stmt.getSubject() instanceof org.openrdf.model.BNode) ) {
+            try {
+                new URL(stmt.getSubject().stringValue());
+            } catch (MalformedURLException ex) {
+                lastCause = "Dropped statement " + stmt.toString() + " due to invalid format in subject.";
+                return false;
+            }
         }
-        try {
-            new URL(stmt.getPredicate().stringValue());
-        } catch (MalformedURLException ex) {
-            lastCause="Dropped statement " + stmt.toString() + " due to invalid format in predicate. "+ex;
-            return false;
-        }
+        //no checks on predicates
+        
         //check only objects that are resources
-        if ( stmt.getObject() instanceof URI ) {
+        if (stmt.getObject() instanceof URI) {
             URL object = null;
 
             try {
                 object = new URL(stmt.getObject().stringValue());
             } catch (MalformedURLException ex) {
-                lastCause ="Dropped statement " + stmt.toString() + " due to invalid format in resource object.";
+                lastCause = "Dropped statement " + stmt.toString() + " due to invalid format in resource object.";
                 return false;
             }
             if (containsSpecialChar(object)) {
-                lastCause="Dropped statement " + stmt.toString() + " due to invalid format in resource object";
+                lastCause = "Dropped statement " + stmt.toString() + " due to invalid format in resource object";
                 return false;
             }
-            if(containsInvalidBSSequence(object)){
-                lastCause="Dropped statement " + stmt.toString() + " due to invalid format in resource object. Found sequence with \\ but no following u." ;
+            if (containsInvalidBSSequence(object)) {
+                lastCause = "Dropped statement " + stmt.toString() + " due to invalid format in resource object. Found sequence with \\ but no following u.";
                 return false;
             }
         }
@@ -57,8 +56,7 @@ public class StrictStatementFilter implements IStatementFilter{
     public String getLastCause() {
         return lastCause;
     }
-    
-    
+
     /**
      * Checks URL whether it contains spaces.
      *
@@ -72,30 +70,30 @@ public class StrictStatementFilter implements IStatementFilter{
         }
         return false;
     }
-    
-    
+
     /**
      * Examines a URL for sequences with \ but no following u.
+     *
      * @param url
-     * @return 
+     * @return
      */
-    private boolean containsInvalidBSSequence(URL url){
+    private boolean containsInvalidBSSequence(URL url) {
         String str = url.toString();
         int idx = str.indexOf("\\", 0);
-        
+
         while (idx >= 0) {
 
             if (idx < str.length() - 1) {
                 char c = str.charAt(idx + 1);
-                if (c != 'u') {  
+                if (c != 'u') {
                     return true;
                 }
             } else {
                 return true;
             }
-            idx = str.indexOf("\\", idx+1);
+            idx = str.indexOf("\\", idx + 1);
         }
         return false;
     }
-    
+
 }

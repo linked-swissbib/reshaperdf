@@ -1,11 +1,13 @@
 package org.gesis.reshaperdf.utils;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.OutputStream;
+import org.openrdf.model.BNode;
+import org.openrdf.model.Literal;
+import org.openrdf.model.Resource;
 import org.openrdf.model.Statement;
 import org.openrdf.model.URI;
+import org.openrdf.model.Value;
 import org.openrdf.model.impl.StatementImpl;
 import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
@@ -51,7 +53,7 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
                 super.handleStatement(getExtStmt(st));
             } else {
                 //Message to System.out if a statements was sorted out.
-                //System.out.println(filter.getLastCause()); 
+                System.out.println(filter.getLastCause()); 
             }
         } else {
             super.handleStatement(getExtStmt(st));
@@ -66,16 +68,32 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
      */
     private Statement getExtStmt(Statement st) {
 
-        String subj = NSResolver.getInstance().blowUp(st.getSubject().stringValue());
-        String pred = NSResolver.getInstance().blowUp(st.getPredicate().stringValue());
-        String obj;
-        if (st.getObject() instanceof URI) {
-            obj = NSResolver.getInstance().blowUp(st.getObject().stringValue());
-            return new StatementImpl(new URIImpl(subj), new URIImpl(pred), new URIImpl(obj));
-        } else {
-            return new StatementImpl(new URIImpl(subj), new URIImpl(pred), st.getObject());
+        //Examine subject
+        Resource subj = null;
+        //URI case
+        if( (st.getSubject() instanceof URI) && !(st.getSubject() instanceof BNode)){ //could be blank node
+            String s = NSResolver.getInstance().blowUp(st.getSubject().stringValue());
+            subj = new URIImpl(s);
         }
-
+        //BNode case
+        else if(st.getSubject() instanceof BNode){
+            subj = st.getSubject();
+        }
+        //Examine predicate - always URI
+        String p = NSResolver.getInstance().blowUp(st.getPredicate().stringValue());
+        URI pred = new URIImpl(p);
+        //Examine object
+        Value obj=null;
+        if (st.getObject() instanceof URI) {
+            String o = NSResolver.getInstance().blowUp(st.getObject().stringValue());
+            obj = new URIImpl(o);
+        } else if(st.getObject() instanceof BNode){
+            obj = st.getObject();
+        }
+        else if(st.getObject() instanceof Literal){
+            obj = st.getObject();
+        }
+        return new StatementImpl(subj, pred, obj);
     }
 
  
