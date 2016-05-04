@@ -40,22 +40,25 @@
 
 
 ##<a name="introduction"></a>Introduction
-Working with RDF mass data is often a prone job. Triplestores that can handle 
-mass data (let's say 200 Mio. statements) are rare, additionally typical 
-operations like import and SPARQL queries are time consuming. A common solution 
-is to split available data corpusses into smaller handier parts and process the
-parts individually.
+Processing RDF mass data can be a prone job. Common triplestores offer certain 
+functionality for querying and manipulating RDF data but only few can handle 
+mass data (let's say more than 200 Mio. statements) at the same time. 
+Typical operations like data import and SPARQL queries tend to be time consuming 
+and inconvenient to be used in comprehensive reshaping operations.
 
-In this context recurring tasks are extracting entities of a certain 
-class from a large dataset, or subdivide a dataset into blocks of a certain 
-property. Unfortunately organizing ones RDF mass data cannot be done easily 
-with available out-of-the-box tools. Also using a triplestore is often not
-suitable since SPARQL queries operate on graphs rather than packages of RDF 
-statements.
+So, when working with simple structured graph data, a solution can be to 
+refrain from using a triplestore and to work with dump files instead. 
+Recurring tasks are *extracting entities* of a certain class from a large 
+dataset, or *subdivide* a dataset into blocks according to a certain property 
+(Blocking), *filtering* the data, *removing* resources
+and single statements, *renaming* properties and similar reshaping operations.
 
-This tool was developed to enable users of large RDF datasets to efficiently 
-organize their data without having to rely on triplestores but on dump files on
-the local HDD.
+Unfortunately organizing ones RDF mass data in the desired manner cannot be done 
+easily with available out-of-the-box tools.
+
+The tool at hand was developed to enable users of large RDF datasets to 
+efficiently organize and reshape their data without the need of a triplestore. 
+
 
 
 ##<a name="sortedntriples"></a>Sorted N-Triples
@@ -83,7 +86,8 @@ enrichment process.
 6. If necessary convert the links to SNT
 7. Merge the links into the data (one iteration)
 
-The flexible nature of this tool is especially helpful with hetergene datasets.
+The flexible nature of this tool is especially helpful with heterogeneous 
+datasets.
 
 ##<a name="setup"></a>Setup
 
