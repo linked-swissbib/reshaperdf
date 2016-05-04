@@ -24,7 +24,6 @@ public class PumpupCommand implements ICMD {
     public String NAME = "pumpup";
     public String EXPLANATION = "Extends the namespaces in an NTriple file to thier long forms.";
     public String HELPTEXT = "Usage: pumpup <infile> <outfile>\n" + EXPLANATION;
-    public int linesPerFile = 1000000;
 
     @Override
     public String getName() {
