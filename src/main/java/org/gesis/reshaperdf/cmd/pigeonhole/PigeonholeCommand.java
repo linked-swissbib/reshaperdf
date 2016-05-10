@@ -39,7 +39,7 @@ import org.openrdf.rio.RDFHandlerException;
 import org.openrdf.rio.RDFParseException;
 
 /**
- * Categorizes the ressources within a file according to the frequency of 
+ * Categorizes the resources within a file according to the frequency of 
  * their attributes.
  * @author Felix Bensmann
  */
@@ -48,12 +48,12 @@ public class PigeonholeCommand implements ICMD, IResourceHandler {
     private static final String RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
     private String NAME = "pigeonhole";
-    private String EXPLANATION = "Pigeonholes the ressources within a file according to the frequency of their attributes.";
+    private String EXPLANATION = "Pigeonholes the resources within a file according to the frequency of their attributes.";
     private String HELPTEXT = "Usage: " + NAME + " <infile> <outfile A> <outfile B> <outfile C> <CSV> <total threshold>\n" + EXPLANATION;
 
     private String type = null;
     private String[] predicateArr = null;
-    private int totalThreshold = -1;
+    private int totalThreshold = -1; //threshold for the total column in the CSV
 
     private ResourceWriter writerA = null;
     private ResourceWriter writerB = null;
@@ -193,7 +193,7 @@ public class PigeonholeCommand implements ICMD, IResourceHandler {
         if (containsType(res, type)) {
             String[][] values = new String[predicateArr.length][];
             for (int i = 0; i < predicateArr.length; i++) {//for every requested predicate
-                values[i] = getAllDistinctObjects(res, predicateArr[i]); //get the objects
+                values[i] = getAllDistinctObjects(res, predicateArr[i]); //get the objects from the SNT infile
             }
             if (containsOneEmpty(values)) { //when a resource does not contain all the requested properties
                 try {
@@ -205,7 +205,7 @@ public class PigeonholeCommand implements ICMD, IResourceHandler {
 
                 CombinationGenerator cGen = new CombinationGenerator(values);
                 for (int i = 0; i < cGen.count(); i++) {
-                    String[] combi = cGen.getCombination();
+                    String[] combi = cGen.getCombination(); //reconstruct the combined entries from the single ones
                     String concat = concat(combi, 0, combi.length - 1);
                     if (Collections.binarySearch(list, concat) >= 0) { //entry exists
                         try {

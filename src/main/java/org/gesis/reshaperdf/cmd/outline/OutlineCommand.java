@@ -36,20 +36,21 @@ import org.openrdf.model.impl.URIImpl;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
- * Extracts literal representations of resources.
+ * Creates literal representations for each resource in a file. The
+ * representation is mapped to a given property.
+ *
  * @author Felix Bensmann
  */
 public class OutlineCommand implements ICMD {
 
     private static final String RDFS_LABEL = "http://www.w3.org/2000/01/rdf-schema#label";
-    
-    
+
     private static final String[] PROPERTIES = new String[]{RDFS_LABEL};
-    
-    
+
     private String NAME = "outlineresources";
-    private String EXPLANATION = "Outlines a resource into one statement with a literal.";
-    private String HELPTEXT = "Usage: " + NAME + "<infile> <outfile> <target property>\n" + EXPLANATION;
+    private String EXPLANATION = "Creates literal representations for each resource in a file. \n"
+            + "The representation is mapped to a given property.";
+    private String HELPTEXT = "Usage: " + NAME + " <infile> <outfile> <target property>\n" + EXPLANATION;
 
     public OutlineCommand() {
 
@@ -101,7 +102,7 @@ public class OutlineCommand implements ICMD {
             while (reader.peek() != null) {
                 Statement[] res = reader.peek();
                 reader.removeHead();
-                Statement st = outlineResource(res,PROPERTIES,targetProperty);
+                Statement st = outlineResource(res, PROPERTIES, targetProperty);
                 writer.handleStatement(st);
             }
             writer.endRDF();
@@ -130,7 +131,7 @@ public class OutlineCommand implements ICMD {
             }
         }
         //if no literal could be found, use subject uri
-        if(literalList.isEmpty()){
+        if (literalList.isEmpty()) {
             literalList.add(res[0].getSubject().stringValue());
         }
         //Remove duplicates
