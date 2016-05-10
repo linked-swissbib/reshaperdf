@@ -42,7 +42,7 @@ import org.gesis.reshaperdf.cmd.sort.SortCommand;
 import org.gesis.reshaperdf.cmd.split.SplitCommand;
 import org.gesis.reshaperdf.cmd.substract.SubtractCommand;
 import org.gesis.reshaperdf.cmd.version.VersionCommand;
-import org.gesis.reshaperdf.cmd.separatelinks.ExtractDuplicateLinksCommand;
+import org.gesis.reshaperdf.cmd.extractduplicatelinks.ExtractDuplicateLinksCommand;
 
 /**
  * reshaperdf is a tool collection to work with RDF data based on sorted

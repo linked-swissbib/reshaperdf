@@ -15,7 +15,7 @@
  * License along with this program; if not, see 
  * http://www.gnu.org/licenses/ .
  */
-package org.gesis.reshaperdf.cmd.separatelinks;
+package org.gesis.reshaperdf.cmd.extractduplicatelinks;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -107,7 +107,7 @@ public class ExtractDuplicateLinksCommand implements ICMD {
             CheckedNTriplesWriter writer = new CheckedNTriplesWriter(new FileOutputStream(subs), null);
             writer.startRDF();
 
-            //step 1: Since the triples are sorted, we can compare a subject 
+            //step 1: Since the triples are sorted, we can compare the subjects 
             //with its following. If they match both triples are writen to the subjects file.
             boolean serie = false;
             while (!pReader.isEmpty()) {
