@@ -3,11 +3,15 @@
 <table>
     <tr>
         <td>Author:</td>
-        <td>bensmafx</td>
+        <td>Felix Bensmann</td>
     </tr>
     <tr>
         <td>Date:</td>
         <td>07. Dec. 2015</td>
+    </tr>
+    <tr>
+        <td>Please note:</td>
+        <td>This document may be incomplete.</td>
     </tr>
 </table>
 
@@ -19,22 +23,28 @@
 * [Terms](#Terms)
 * [Setup](#Setup)
 * [Commands](#commands)
+    * [analyzetype] (#cmd_analyzetype)
     * [block](#cmd_block)
     * [checksorting](#cmd_checksorting)
     * [correct](#cmd_correct)
+    * [extractduplicatelinks] (#cmd_extractduplicatelinks)
+    * [extractreferenced] (#cmd_extractreferenced)
     * [extractresources](#cmd_extractresources)
+    * [filter] (#cmd_filter)
     * [getenrichment](#cmd_getenrichment)
     * [merge](#cmd_merge)
     * [mergedir](#cmd_mergedir)
     * [ntriplify](#cmd_ntriplify)
+    * [outline] (#cmd_outline)
+    * [pigeonhole] (#cmd_pigeonhole)
     * [pumpup](#cmd_pumpup)
     * [removeduplicates](#cmd_removeduplicates)
     * [renameproperty](#cmd_renameproperty)
+    * [securelooseends] (#cmd_securelooseends)
     * [sort](#cmd_sort)
     * [split](#cmd_split)
-    * [subract](#cmd_subtract)
+    * [subtract](#cmd_subtract)
     * [version](#cmd_version)
-    * [extractduplicates](#cmd_extractduplicates)
     * [help](#cmd_help)
 * [Getting Started](#gettingstarted)
 
@@ -106,6 +116,47 @@ The software requires at least JRE 1.7 .
 This chapter outlines the operations and their usage. A command can be called using the following syntax:
 
 `java -jar reshaperdf-1.0-SNAPSHOT.jar <command> [<command parameter> ...]`
+
+###<a name="cmd_analyzetype"></a>analyzetype
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>analyzetype</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>Usage: analyzetype &lt;infile&gt; &lt;type&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Counts the occurences of literal objects for a given rdf:type in combination with one or more properties. When more 
+            properties are used, the combinations of properties are counted as well. Output is written to a CSV file. Use case example:
+            a ranking of most common first name and last name combinations for persons could be created. 
+            See also: <a href="#cmd_pigeonhole">pigeonhole</a></td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file, requires SNT.</td>
+    </tr>
+    <tr>
+        <td>Argument: type</td>
+        <td>The type of resource to be analyze e.g. foaf:Person</td>
+    </tr>
+    <tr>
+        <td>Argument: predicate</td>
+        <td>The property to examine. Requires long namespace version.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>One or more CSV files, automatically named.</td>
+    </tr>
+</table> 
+
 
 ###<a name="cmd_block"></a>block
 
@@ -211,7 +262,80 @@ This chapter outlines the operations and their usage. A command can be called us
 </table> 
 
 
-###<a name="cmd_extracteresources"></a>extractresources
+###<a name="cmd_extractduplicatelinks"></a>extractduplicatelinks
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>extractduplicatelinks</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>extractduplicatelinks &lt;infile&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Statement based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Extracts statements with duplicate subjects and objects. Useful in combination with the <a href="#cmd_subtract">subtract</a> command.</td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file, requires SNT.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>Two N-Triples files: subjects.nt contains all links that do not address their subject exclusively; 
+            objects.nt contains all links that do not address their objects exclusively.</td>
+    </tr>
+</table> 
+
+
+###<a name="cmd_extractreferenced"></a>extractreferenced
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>extract referenced</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td> extractreferenced &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Extracts resources from file B that are referenced in file A.</td>
+    </tr>
+    <tr>
+        <td>Argument: file A</td>
+        <td>The input file containing the references. SNT required.</td>
+    </tr>
+    <tr>
+        <td>Argument: file B</td>
+        <td>A second input file containing the referenced resources. SNT required.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file. This file will contain the extractes resources.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file containing the extracted resources.</td>
+    </tr>
+</table> 
+
+
+
+
+
+
+###<a name="cmd_extractresources"></a>extractresources
 
 <table border="1" style="width:100%">
     <tr>
@@ -244,7 +368,7 @@ This chapter outlines the operations and their usage. A command can be called us
     </tr>
     <tr>
         <td>Argument: object</td>
-        <td>The object to look for. Can be literal or URL. Use a "?" to indicate a wildcard.</td>
+        <td>The object to look for. Can be a literal or a URL. Use a "?" to indicate a wildcard.</td>
     </tr>
     <tr>
         <td>Argument: offset</td>
@@ -258,8 +382,49 @@ This chapter outlines the operations and their usage. A command can be called us
         <td>Output</td>
         <td>An SNT file with the extracted resources.</td>
     </tr>
-</table> 
+</table>
 
+
+###<a name="cmd_filter"></a>filter
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>filter</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>filter &lt;whitelist|blacklist&gt; &lt;source file&gt; &lt;filter file&gt; &lt;outfile&gt; </td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Removes statments from an N-Triple file accoringly to a white or black list.</td>
+    </tr>
+    <tr>
+        <td>Argument: whitelist|blacklist</td>
+        <td>Keyword either whitelist to indicate that a whitelist is to be used or blacklist to indicate that a blacklist is to be used. Blacklist is not yet implemented.</td>
+    </tr>
+    <tr>
+        <td>Argument: source file</td>
+        <td>File to filter</td>
+    </tr>
+    <tr>
+        <td>Argument: filter file</td>
+        <td>A text file containing the properties to be subject to the filter. Is a simple line-based text file.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>Name of the file to store the output in.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file with the remaining resources.</td>
+    </tr>
+</table>
 
 
 ###<a name="cmd_getenrichment"></a>getenrichment
@@ -279,7 +444,7 @@ This chapter outlines the operations and their usage. A command can be called us
     </tr>
     <tr>
         <td>Description</td>
-        <td>Extracts resources from an SNT file, that are adressed by the object of an SNT link file. Missing resources in the resources file are ignored. The subjects of the extractes statements are altered to the subject of the link.</td>
+        <td>Extracts resources from an SNT file, that are adressed by the object of an SNT link file. Missing resources in the resources file are ignored. The subjects of the extracted statements are altered to the subject of the link.</td>
     </tr>
     <tr>
         <td>Argument: linkfile</td>
@@ -415,6 +580,111 @@ This chapter outlines the operations and their usage. A command can be called us
 </table> 
 
 
+###<a name="cmd_outline"></a>outline
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>outline</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>outline &lt;infile&gt; &lt;outfile> &lt;target property></td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Creates literal representations for each resource in a file. 
+            The representation is mapped to a given property. 
+            See also: <a href="#cmd_securelooseends">securelooseends</a>  </td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file with the resource to be outlined. SNT required.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the file to store the output in.</td>
+    </tr>
+    <tr>
+        <td>Argument: target property</td>
+        <td>The property to assign the outline to.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>Name of the file to store the output in.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file with one statement for each resource. &lt;original subject&gt; &lt;target property&gt; "literal representation"</td>
+    </tr>
+</table>
+
+
+
+###<a name="cmd_pigeonhole"></a>pigeonhole
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>pigeonhole</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>pigeonhole &lt;infile&gt; &lt;outfile A&gt; &lt;outfile B&gt; &lt;outfile C&gt; &lt;CSV&gt; &lt;total threshold&gt;></td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Pigeonholes the resources within an SNT file according to the frequency of their attributes. 
+            A CSV file contains information about a resource of a certain type and their respective properties, 
+            combinations of these properties and their occurences. 
+            The CSV file is the output of the analyzetype command. The command reads through the CSV input, 
+            a threshold on the total column can be used to close out entries that are below this threshold. This reduces memory load.
+            While reading through the SNT input file the resources are examined. Their property-combinations
+            are looked up in the CSV table. If the resource does not contain all of the properties stated in the CSV then it is written to file C. 
+            If a properties combination has an entry in the table then the resource is written to file A. 
+            If a certain combination is not present in the table, then the resource is written to file B. 
+            See also: <a href="#cmd_analyzetype">analyzetype</a>.  </td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file with the resources to be pigeonholed. SNT required.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile A</td>
+        <td>The name of the file to store the output in.</td>
+    </tr>
+     <tr>
+        <td>Argument: outfile B</td>
+        <td>The name of the file to store the output in.</td>
+    </tr>
+     <tr>
+        <td>Argument: outfile C</td>
+        <td>The name of the file to store the output in.</td>
+    </tr>
+    <tr>
+        <td>Argument: CSV</td>
+        <td>A CSV file containing the frequencies of the properties values. Same as the output of the analyzetype command.</td>
+    </tr>
+    <tr>
+        <td>Argument: total threshold</td>
+        <td>A positive integer to be used as lower threshold on the total frequencies column in the CSV. Can be used to close out uncommon values.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>Three SNT files with the  resources of their category. (See above)</td>
+    </tr>
+</table>
+
+
+
 ###<a name="cmd_pumpup"></a>pumpup
 
 <table border="1" style="width:100%">
@@ -542,6 +812,53 @@ List of namespaces with their respective short forms.
     <tr>
         <td>Output</td>
         <td>An SNT a copy of the input file with replaced properties.</td>
+    </tr>
+</table> 
+
+
+###<a name="cmd_securelooseends"></a>securelooseends
+
+<table border="1" style="width:100%">
+    <tr>
+        <td>Name</td>
+        <td>securelooseends</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>securelooseends &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; &lt;substitue1&gt;[&lt;predicate2&gt; ...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Extracts resources from file B that are referenced in file A. 
+            Then reduces this resource to a meaningful string and adds it to the original resource.</td>
+    </tr>
+    <tr>
+        <td>Argument: file A</td>
+        <td>An SNT input file containing the references.</td>
+    </tr>
+    <tr>
+        <td>Argument: file B</td>
+        <td>An SNT input file containing the resources that are referenced in file A.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Argument: predicate1</td>
+        <td>A property from file A whose reference is to be looked up in file B.</td>
+    </tr>
+    <tr>
+        <td>Argument: substitute1</td>
+        <td>A property to map the meaningful string to.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file containing the resulting statements. e.g. &lt;s&gt; &lt;substitute1&gt; "meaningful string"</td>
     </tr>
 </table> 
 
@@ -680,34 +997,6 @@ List of namespaces with their respective short forms.
 </table> 
 
 
-###<a name="cmd_extractduplicates"></a>extractduplicates
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>extractduplicates</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>extractduplicates &lt;infile&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Statement based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Extracts all links from a link file that do not adress their source or target exclusively.</td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>Name of the link file. Requires SNT.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>One file containing links with duplicate subjects, as SNT (*_subs.nt). One file containing links with duplicate objects, not as unsorted N-Triples (*_objs).</td>
-    </tr>
-</table> 
 
 
 ###<a name="cmd_help"></a>help
