@@ -43,6 +43,7 @@ import org.gesis.reshaperdf.cmd.split.SplitCommand;
 import org.gesis.reshaperdf.cmd.substract.SubtractCommand;
 import org.gesis.reshaperdf.cmd.version.VersionCommand;
 import org.gesis.reshaperdf.cmd.extractduplicatelinks.ExtractDuplicateLinksCommand;
+import org.gesis.reshaperdf.cmd.pick.PickCommand;
 
 /**
  * reshaperdf is a tool collection to work with RDF data based on sorted
@@ -115,6 +116,7 @@ public class App {
         repo.add(new ExtractReferencedCommand());
         repo.add(new OutlineCommand());
         repo.add(new SecureLooseEndsCommand());
+        repo.add(new PickCommand());
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list
