@@ -106,7 +106,7 @@ public class NTriplifyCommand implements ICMD {
         //use special N-Triples writer that only writes valid N-Triples and drops invalid
         RDFWriter ntriplesWriter = null;
         try {
-            ntriplesWriter = new CheckedNTriplesWriter(new FileOutputStream(outFile), new StrictStatementFilter());
+            ntriplesWriter = new CheckedNTriplesWriter(new FileOutputStream(outFile), new StrictStatementFilter(), true);
 
         } catch (FileNotFoundException ex) {
             return new CommandExecutionResult(false, "Out file " + outFile.getAbsolutePath() + " was not found.");

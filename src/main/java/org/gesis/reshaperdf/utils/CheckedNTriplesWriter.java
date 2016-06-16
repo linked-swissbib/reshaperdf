@@ -38,6 +38,7 @@ import org.openrdf.rio.ntriples.NTriplesWriter;
 public class CheckedNTriplesWriter extends NTriplesWriter {
 
     private IStatementFilter filter = null;
+    private boolean useBNodeTranscription = false;
     
     /**
      * Ctor
@@ -51,6 +52,11 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
         this.filter = filter;
     }
     
+    public CheckedNTriplesWriter(OutputStream out, IStatementFilter filter, boolean useBNodeTranscription)throws FileNotFoundException{
+        super(out);
+        this.filter = filter;
+        this.useBNodeTranscription=useBNodeTranscription;
+    }
     
 
     /**
@@ -64,7 +70,11 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
     public void handleStatement(Statement stmt) throws RDFHandlerException {
         //Statement st = correctObject(stmt);
         Statement st = stmt;
-
+        if(useBNodeTranscription){
+            st=transcriptBNode(st);
+        }
+        
+        
         if (filter != null) { //if a filter is set...
 
             if (filter.accept(st)) { // ...use it
@@ -78,6 +88,27 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
         }
 
     }
+    
+    
+    private Statement transcriptBNode(Statement stmt){
+        
+        if(stmt.getSubject() instanceof BNode || stmt.getObject() instanceof BNode){
+            Resource subj = stmt.getSubject();
+            if(subj instanceof BNode){
+                String subjStringValue = subj.stringValue().substring(2);
+                subj = new URIImpl("http://null.gesis.org/"+subjStringValue);
+            }
+            Value obj = stmt.getObject();
+            if(obj instanceof BNode){
+                String objStringValue = obj.stringValue().substring(2);
+                obj = new URIImpl("http://null.gesis.org/"+objStringValue);
+            }
+            return new StatementImpl(subj,stmt.getPredicate(),obj);
+            
+        }
+        else return stmt;
+    }
+    
 
     /**
      * Replaces the namespace in a statement with is long form.
