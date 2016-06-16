@@ -24,6 +24,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 
 /**
  * @author Felix Bensmann
@@ -73,6 +74,14 @@ public class LineReader {
         String retVal = buf;
         buf = br.readLine();
         return retVal;
+    }
+    
+    
+    public ArrayList<String>read2List(ArrayList<String> list) throws IOException{
+        while(!isEmpty()){
+            list.add(readLine());
+        }
+        return list;
     }
     
     
