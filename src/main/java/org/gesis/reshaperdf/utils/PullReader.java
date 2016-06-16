@@ -49,7 +49,7 @@ public class PullReader {
     public PullReader(File file) {
         this.file = file;
         //queue is limited to 10000 elements
-        queue = new LinkedBlockingQueue<Statement>(10000);
+        queue = new LinkedBlockingQueue<Statement>(100000);
 
         parser = Rio.createParser(RDFFormat.NTRIPLES);
         parser.getParserConfig().addNonFatalError(NTriplesParserSettings.FAIL_ON_NTRIPLES_INVALID_LINES);
@@ -145,7 +145,7 @@ public class PullReader {
     public void removeHead() {
         //uses a workaround to compensate that there is no blocking peek method in the queue
         try {
-            current = queue.poll(5, TimeUnit.SECONDS);
+            current = queue.poll(20, TimeUnit.SECONDS);
             if (current == null && !fileFinished) {
                 System.err.println("Unable to retrieve statement from pull reader " + file.getAbsolutePath());
                 System.err.println(current);
