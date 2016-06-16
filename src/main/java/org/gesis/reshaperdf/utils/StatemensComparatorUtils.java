@@ -18,6 +18,7 @@
 package org.gesis.reshaperdf.utils;
 
 import org.openrdf.model.Literal;
+import org.openrdf.model.Resource;
 import org.openrdf.model.URI;
 import org.openrdf.model.Value;
 
@@ -67,5 +68,14 @@ public class StatemensComparatorUtils {
             return -1;
         }
     }
+    
+    public static int compare2Resources(Resource r1, Resource r2){
+        return r1.stringValue().compareTo(r2.stringValue());
+    }
+    
+    public static int compare2URIs(URI u1, URI u2){
+        return u1.stringValue().compareTo(u2.stringValue());
+    }
+    
     
 }
