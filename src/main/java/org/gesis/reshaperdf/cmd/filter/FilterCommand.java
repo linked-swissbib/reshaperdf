@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
+import org.gesis.reshaperdf.utils.BlackListPropertyFilter;
 import org.gesis.reshaperdf.utils.CheckedNTriplesWriter;
 import org.gesis.reshaperdf.utils.LineReader;
 import org.gesis.reshaperdf.utils.PullReader;
@@ -116,7 +117,7 @@ public class FilterCommand implements ICMD {
                 writer = new CheckedNTriplesWriter(new FileOutputStream(outFile), new WhiteListPropertyFilter(proptertyArr));
 
             } else {
-                throw new CommandExecutionException("Black list filter not implemented.");
+                writer = new CheckedNTriplesWriter(new FileOutputStream(outFile), new BlackListPropertyFilter(proptertyArr));
 
             }
         } catch (FileNotFoundException ex) {
