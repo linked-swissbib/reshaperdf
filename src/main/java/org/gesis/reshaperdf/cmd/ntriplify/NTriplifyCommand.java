@@ -28,8 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Map.Entry;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
@@ -51,7 +50,7 @@ public class NTriplifyCommand implements ICMD {
 
     public String NAME = "ntriplify";
     public String EXPLANATION = "Takes an input directory and merges all RDF files into an NTriples file.";
-    public String HELPTEXT = "Usage: ntriplify <input dir> <outfile> [JSON-LD context]\nTakes an input directory and merges all RDF files into an NTriples file.";
+    public String HELPTEXT = "Usage: ntriplify <input dir> <outfile> [<JSON-LD context path> <JSON-LD context file>][...] \nTakes an input directory and merges all RDF files into an NTriples file.";
 
     @Override
     public String getName() {
@@ -79,7 +78,7 @@ public class NTriplifyCommand implements ICMD {
     @Override
     public CommandExecutionResult execute(String[] args) throws CommandExecutionException {
         //check args
-        if (args.length < 3 || args.length % 2 == 0) {
+        if (args.length < 3 || args.length % 2 == 0) { //case there are less than 3 parameters or the cound of params is even
             return new CommandExecutionResult(false, "Invalid parameter count.");
         }
         File inDir = new File(args[1]);
@@ -89,15 +88,17 @@ public class NTriplifyCommand implements ICMD {
         File outFile = new File(args[2]);
 
         int off = 3;
-        int x = args.length - off;
+        int cntCtx = args.length - off;
         Map<String, File> map = new HashMap<String, File>();
-        for (int i = 0; i < x / 2; i += 2) {
+        for (int i = 0; i < cntCtx; i += 2) {
             File contextFile = new File(args[off + i + 1]);
             if (!contextFile.exists() || !contextFile.isFile()) {
                 return new CommandExecutionResult(false, "Context file " + contextFile.getName() + " is not a valid file.");
             }
             map.put(args[off + i], contextFile);
         }
+        
+        printContextMapping(map);
 
         //search in the given directory and its subdirectories for files with the extensions
         //xml, rdf, nt, jsonld
@@ -120,7 +121,7 @@ public class NTriplifyCommand implements ICMD {
                     RDFParser rdfParser = Rio.createParser(format);
                     // link our parser to our writer...
                     rdfParser.setRDFHandler(ntriplesWriter);
-                    // set tollerance towards uncool ntriples
+                    // set tollerance towards certain malformed ntriples
                     rdfParser.getParserConfig().addNonFatalError(NTriplesParserSettings.FAIL_ON_NTRIPLES_INVALID_LINES);
                     // ...and start the conversion!
                     FileInputStream fis = new FileInputStream(inputFiles[i]);
@@ -160,6 +161,17 @@ public class NTriplifyCommand implements ICMD {
             writer.endRDF();
         } catch (RDFHandlerException ex) {
             System.err.println("Error on closing writer: "+ex);
+        }
+    }
+
+    
+    /**
+     * Prints context mapping to System.out
+     * @param map 
+     */
+    private void printContextMapping(Map<String, File> map) {
+        for(Entry e : map.entrySet()){
+            System.out.println(e.getKey()+": "+e.getValue());
         }
     }
 
