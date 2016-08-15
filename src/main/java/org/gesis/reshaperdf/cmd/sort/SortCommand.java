@@ -25,6 +25,8 @@ import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
 import org.gesis.reshaperdf.utils.sort.Sort;
+import org.gesis.reshaperdf.utils.sortnew.SortNew;
+import org.openrdf.rio.RDFHandlerException;
 
 /**
  * @author Felix Bensmann
@@ -67,10 +69,13 @@ public class SortCommand implements ICMD, Thread.UncaughtExceptionHandler {
         File outFile = new File(args[2]);
         
         try {
-            Sort.sort(inFile,outFile,this);
+            //Sort.sort(inFile,outFile,this);
+            SortNew.sort(inFile, outFile);
         } catch (InterruptedException ex) {
             throw new CommandExecutionException(ex);
         } catch (IOException ex) {
+            throw new CommandExecutionException(ex);
+        } catch (RDFHandlerException ex) {
             throw new CommandExecutionException(ex);
         }
           
