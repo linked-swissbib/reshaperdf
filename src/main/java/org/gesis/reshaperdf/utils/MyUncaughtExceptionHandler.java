@@ -26,6 +26,7 @@ public class MyUncaughtExceptionHandler implements Thread.UncaughtExceptionHandl
     @Override
     public void uncaughtException(Thread t, Throwable e) {
         System.err.println(t.getName() + "threw an exception: " + e);
+        System.exit(-2);
     }
 
 }
