@@ -19,20 +19,15 @@ package org.gesis.reshaperdf.cmd.sort;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
 import org.gesis.reshaperdf.utils.sort.Sort;
-import org.gesis.reshaperdf.utils.sortnew.SortNew;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
- * @author Felix Bensmann
- * Sorts an NTriple file alphabetically. At first the input file is splitted to various smaller
- * files. These smaller files are sorted separately by a threads as soon as they
- * fully written. After each file is sorted, the files are remerged.
+ * @author Felix Bensmann Sorts an NTriple file alphabetically. Uses the sort
+ * utilities from the ...utils.sort-package.
  */
 public class SortCommand implements ICMD, Thread.UncaughtExceptionHandler {
 
@@ -65,12 +60,12 @@ public class SortCommand implements ICMD, Thread.UncaughtExceptionHandler {
         if (!inFile.exists() || !inFile.isFile()) {
             return new CommandExecutionResult(false, "Input file is not a valid file.");
         }
-        
+
         File outFile = new File(args[2]);
-        
+
         try {
             //Sort.sort(inFile,outFile,this);
-            SortNew.sort(inFile, outFile);
+            Sort.sort(inFile, outFile);
         } catch (InterruptedException ex) {
             throw new CommandExecutionException(ex);
         } catch (IOException ex) {
@@ -78,15 +73,14 @@ public class SortCommand implements ICMD, Thread.UncaughtExceptionHandler {
         } catch (RDFHandlerException ex) {
             throw new CommandExecutionException(ex);
         }
-          
+
         return new CommandExecutionResult(true);
     }
 
     @Override
     public void uncaughtException(Thread t, Throwable e) {
-        System.err.println("Error in thread "+ t.getName()+": "+ e.getMessage());
+        System.err.println("Error in thread " + t.getName() + ": " + e.getMessage());
         System.exit(-2);
     }
-    
 
 }

@@ -35,7 +35,7 @@ import org.openrdf.rio.helpers.NTriplesParserSettings;
 /**
  * @author Felix Bensmann A special kind of RDFReader that can be polled. This
  * is achieved by using a producer consumer approach. A thread that uses a
- * standard reader fills a threadsafe queue. Data can be read from the queue by
+ * standard reader fills a threadsafe queue. Data can be read from the queue by a
  * consumer. Both producer and consumer wait on the queue until they can finish
  * their work.
  */
@@ -160,7 +160,7 @@ public class PullReader {
         try {
             current = queue.poll(5, TimeUnit.SECONDS);
             if (current == null && !fileFinished) {
-                System.out.println("Second chance for producer.");
+                System.out.println(Thread.currentThread().getName() +"on file "+file.getName()+" second chance for producer.");
                 current = queue.poll(20, TimeUnit.SECONDS);
                 if (current == null && !fileFinished) {
                     System.err.println(Thread.currentThread().getName()+": Unable to retrieve statement from pull reader " + file.getAbsolutePath());

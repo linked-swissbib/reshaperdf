@@ -15,7 +15,7 @@
  * License along with this program; if not, see 
  * http://www.gnu.org/licenses/ .
  */
-package org.gesis.reshaperdf.utils.sortnew;
+package org.gesis.reshaperdf.utils.sort;
 
 import java.io.File;
 import java.io.FileOutputStream;

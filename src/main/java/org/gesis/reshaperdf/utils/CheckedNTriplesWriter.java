@@ -90,6 +90,12 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
     }
     
     
+    @Override
+    public void endRDF() throws RDFHandlerException{
+        super.endRDF();
+    }
+    
+    
     private Statement transcriptBNode(Statement stmt){
         
         if(stmt.getSubject() instanceof BNode || stmt.getObject() instanceof BNode){
