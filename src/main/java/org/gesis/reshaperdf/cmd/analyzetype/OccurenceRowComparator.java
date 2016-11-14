@@ -54,7 +54,7 @@ public class OccurenceRowComparator implements Comparator<OccurenceRow> {
                 return 1;
             } else {
                 //compare keys
-                return o1.getKey().compareTo(o2.getKey());
+                return o2.getKey().compareTo(o1.getKey());
             }
         }
     }
