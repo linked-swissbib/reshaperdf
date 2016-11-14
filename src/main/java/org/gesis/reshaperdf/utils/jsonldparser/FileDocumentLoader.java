@@ -19,44 +19,67 @@ package org.gesis.reshaperdf.utils.jsonldparser;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.github.jsonldjava.core.DocumentLoader;
-import com.github.jsonldjava.core.JsonLdError;
-import com.github.jsonldjava.core.RemoteDocument;
 import com.github.jsonldjava.utils.JsonUtils;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Extension of DocumentLoader needed to use a JSON-LD context from an 
- * external document.
+ * Extension of DocumentLoader needed to use a JSON-LD context from an external
+ * document.
+ *
  * @author Felix Bensmann
  */
 public class FileDocumentLoader extends DocumentLoader {
 
-    private Map<String,File> map = null;
-    
+    private Map<String, File> map = null;
+    private static Map<java.net.URL, Object>cache = null;
+
     public FileDocumentLoader(Map<String, File> map) {
         super();
         this.map = map;
+        if(cache==null){
+            cache = new HashMap<java.net.URL, Object>();
+        }
     }
-
 
     @Override
     public Object fromURL(java.net.URL url) throws JsonParseException, IOException {
-        File file = map.get(url.toString());
-        if(file == null){
-            super.fromURL(url);
+        //respond with cache
+        if(cache.containsKey(url)){
+            return cache.get(url);
         }
-        return JsonUtils.fromInputStream(new FileInputStream(file),"UTF-8");
+        //retrieve
+        Object ctx = null;
+        boolean exception = false;
+        try {
+            ctx = super.fromURL(url);
+        } catch (IOException ioe) {
+            exception = true;
+        }
+        if (ctx == null || exception) {
+            File file = map.get(url.toString());
+            ctx = JsonUtils.fromInputStream(new FileInputStream(file), "UTF-8");
+            if (file == null) {
+                throw new IOException("Unable to obtain a context.");
+            }
+        }
+        
+        //cache context
+        if(!cache.containsKey(url)){
+            cache.put(url, ctx);
+        }
+        return ctx;
     }
     
+
     @Override
     public InputStream openStreamFromURL(java.net.URL url) throws IOException {
         File file = map.get(url);
-        if(file == null){
+        if (file == null) {
             super.openStreamFromURL(url);
         }
         return new FileInputStream(file);
