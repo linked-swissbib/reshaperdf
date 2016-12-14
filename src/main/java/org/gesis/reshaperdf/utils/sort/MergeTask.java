@@ -74,7 +74,7 @@ public class MergeTask implements Runnable {
         PullReader readerB = new PullReader(fileB);
         readerB.load();
 
-        NTriplesWriter writer;
+        CheckedNTriplesWriter writer;
         try {
             //use a special writer that only writes valid triples.
             FileOutputStream fos = new FileOutputStream(file);
