@@ -130,6 +130,7 @@ This chapter outlines the operations and their usage. A command can be called us
 The chapter is subdivided into a section that is about commands intended for 
 everyday use and a section about special commands that do not have a 
 purpose in everyday use but but become handy in exotic use cases.
+The special commands are available in their own branch.
 
 
 ### <a name="everydayuse"></a>Commands for everyday use
