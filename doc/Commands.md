@@ -1,4 +1,5 @@
-#ReshapeRDF - Guide
+# ReshapeRDF - Guide
+A toolset to work with N-Triples
 
 <table>
     <tr>
@@ -10,46 +11,53 @@
         <td>07. Dec. 2015</td>
     </tr>
     <tr>
+        <td>Last change:</td>
+        <td>09. Jan. 2016</td>
+    </tr>
+    <tr>
         <td>Please note:</td>
         <td>This document may be incomplete.</td>
     </tr>
 </table>
 
 
-##TOC
+## TOC
 
 * [Introduction](#introduction)
 * [Sorted N-Triples](#sortedntriples)
 * [Terms](#Terms)
 * [Setup](#Setup)
 * [Commands](#commands)
-    * [analyzetype] (#cmd_analyzetype)
-    * [block](#cmd_block)
-    * [checksorting](#cmd_checksorting)
-    * [correct](#cmd_correct)
-    * [extractduplicatelinks] (#cmd_extractduplicatelinks)
-    * [extractreferenced] (#cmd_extractreferenced)
-    * [extractresources](#cmd_extractresources)
-    * [filter] (#cmd_filter)
-    * [getenrichment](#cmd_getenrichment)
-    * [merge](#cmd_merge)
-    * [mergedir](#cmd_mergedir)
-    * [ntriplify](#cmd_ntriplify)
-    * [outline] (#cmd_outline)
-    * [pigeonhole] (#cmd_pigeonhole)
-    * [pumpup](#cmd_pumpup)
-    * [removeduplicates](#cmd_removeduplicates)
-    * [renameproperty](#cmd_renameproperty)
-    * [securelooseends] (#cmd_securelooseends)
-    * [sort](#cmd_sort)
-    * [split](#cmd_split)
-    * [subtract](#cmd_subtract)
-    * [version](#cmd_version)
-    * [help](#cmd_help)
+    * [Commands for everyday use](#everydayuse)
+        * [block](#cmd_block)
+        * [checksorting](#cmd_checksorting)
+        * [extractresources](#cmd_extractresources)
+        * [filter](#cmd_filter)
+        * [getenrichment](#cmd_getenrichment)
+        * [help](#cmd_help)
+        * [merge](#cmd_merge)
+        * [mergedir](#cmd_mergedir)
+        * [ntriplify](#cmd_ntriplify)
+        * [pick](#cmd_pick)
+        * [removeduplicates](#cmd_removeduplicates)
+        * [renameproperty](#cmd_renameproperty)
+        * [securelooseends](#cmd_securelooseends)
+        * [sort](#cmd_sort)
+        * [split](#cmd_split)
+        * [version](#cmd_version)
+    * [Experimental commands](#experimental)
+        * [analyzetype](#cmd_analyzetype)
+        * [correct](#cmd_correct)
+        * [extractduplicatelinks](#cmd_extractduplicatelinks)
+        * [extractreferenced](#cmd_extractreferenced)
+        * [outline](#cmd_outline)
+        * [pigeonhole](#cmd_pigeonhole)
+        * [pumpup](#cmd_pumpup)
+        * [subtract](#cmd_subtract)
 * [Getting Started](#gettingstarted)
 
 
-##<a name="introduction"></a>Introduction
+## <a name="introduction"></a>Introduction
 Processing RDF mass data can be a prone job. Common triplestores offer certain 
 functionality for querying and manipulating RDF data but only few can handle 
 mass data (let's say more than 200 Mio. statements) at the same time. 
@@ -71,7 +79,7 @@ efficiently organize and reshape their data without the need of a triplestore.
 
 
 
-##<a name="sortedntriples"></a>Sorted N-Triples
+## <a name="sortedntriples"></a>Sorted N-Triples
 When there is an RDF dump file to process, users cannot take for granted that
 stored resources are held together. This is especially true for the N-Triple
 file format but also applies for the RDF/XML file format that even provides a way to 
@@ -99,68 +107,39 @@ enrichment process.
 The flexible nature of this tool is especially helpful with heterogeneous 
 datasets.
 
-##<a name="setup"></a>Setup
+## <a name="setup"></a>Setup
 
 Copy the JAR-Archive reshaperdf-1.0-SNAPSHOT.jar and the lib folder to a directory of your choice.
 The software requires at least JRE 1.7 .
 
-##<a name="terms"></a>Terms
+## <a name="terms"></a>Terms
 
 * **triple and statement** In this application a triple and a statement as known from the RDF context are the same thing. They always fit in one line.
 * **line based** An operation is called that if it understands triples as a string line.
 * **statement based** An operation is called that if it understands triples as triples/statements.
-* **resource based** An operation is called that if it sees the data as individual resources respectively a set of statements.
+* **resource based** An operation is called that if it sees the data as a list of individual resources.
 
-##<a name="commands"></a>Commands
+
+
+## <a name="commands"></a>Commands
 
 This chapter outlines the operations and their usage. A command can be called using the following syntax:
 
 `java -jar reshaperdf-1.0-SNAPSHOT.jar <command> [<command parameter> ...]`
 
-###<a name="cmd_analyzetype"></a>analyzetype
+The chapter is subdivided into a section that is about commands intended for 
+everyday use and a section about experimental commands that do not have a 
+purpose in everyday use but but become handy for e.g. data analysis.
+
+
+### <a name="everydayuse"></a>Commands for everyday use
+
+
+#### <a name="cmd_block"></a>block
 
 <table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>analyzetype</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>Usage: analyzetype &lt;infile&gt; &lt;type&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Resource based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Counts the occurences of literal objects for a given rdf:type in combination with one or more properties. When more 
-            properties are used, the combinations of properties are counted as well. Output is written to a CSV file. Use case example:
-            a ranking of most common first name and last name combinations for persons could be created. 
-            See also: <a href="#cmd_pigeonhole">pigeonhole</a></td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The input file, requires SNT.</td>
-    </tr>
-    <tr>
-        <td>Argument: type</td>
-        <td>The type of resource to be analyze e.g. foaf:Person</td>
-    </tr>
-    <tr>
-        <td>Argument: predicate</td>
-        <td>The property to examine. Requires long namespace version.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>One or more CSV files, automatically named.</td>
-    </tr>
-</table> 
-
-
-###<a name="cmd_block"></a>block
-
-<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>block</td>
@@ -196,9 +175,11 @@ This chapter outlines the operations and their usage. A command can be called us
 </table> 
 
 
-###<a name="cmd_checksorting"></a>checksorting
+#### <a name="cmd_checksorting"></a>checksorting
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>checksorting</td>
@@ -227,117 +208,11 @@ This chapter outlines the operations and their usage. A command can be called us
 
 
 
-
-###<a name="cmd_correct"></a>correct
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>correct</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>correct &lt;infile&gt; &lt;outfile&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Line based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Removes invalid ntriples from a given file respectively Replaces invalid character with the ?-character. </td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The input file, requires N-Triples.</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile</td>
-        <td>Name of the output file.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>An N-Triples file with corrected content.</td>
-    </tr>
-</table> 
-
-
-###<a name="cmd_extractduplicatelinks"></a>extractduplicatelinks
+#### <a name="cmd_extractresources"></a>extractresources
 
 <table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>extractduplicatelinks</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>extractduplicatelinks &lt;infile&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Statement based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Extracts statements with duplicate subjects and objects. Useful in combination with the <a href="#cmd_subtract">subtract</a> command.</td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The input file, requires SNT.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>Two N-Triples files: subjects.nt contains all links that do not address their subject exclusively; 
-            objects.nt contains all links that do not address their objects exclusively.</td>
-    </tr>
-</table> 
-
-
-###<a name="cmd_extractreferenced"></a>extractreferenced
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>extract referenced</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td> extractreferenced &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Resource based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Extracts resources from file B that are referenced in file A.</td>
-    </tr>
-    <tr>
-        <td>Argument: file A</td>
-        <td>The input file containing the references. SNT required.</td>
-    </tr>
-    <tr>
-        <td>Argument: file B</td>
-        <td>A second input file containing the referenced resources. SNT required.</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile</td>
-        <td>The name of the output file. This file will contain the extractes resources.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>An SNT file containing the extracted resources.</td>
-    </tr>
-</table> 
-
-
-
-
-
-
-###<a name="cmd_extractresources"></a>extractresources
-
-<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>extractresources</td>
@@ -385,9 +260,11 @@ This chapter outlines the operations and their usage. A command can be called us
 </table>
 
 
-###<a name="cmd_filter"></a>filter
+#### <a name="cmd_filter"></a>filter
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>filter</td>
@@ -427,9 +304,11 @@ This chapter outlines the operations and their usage. A command can be called us
 </table>
 
 
-###<a name="cmd_getenrichment"></a>getenrichment
+#### <a name="cmd_getenrichment"></a>getenrichment
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>getenrichment</td>
@@ -466,11 +345,43 @@ This chapter outlines the operations and their usage. A command can be called us
 
 
 
-
-
-###<a name="cmd_merge"></a>merge
+#### <a name="cmd_help"></a>help
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>help</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>help &lt;cmd&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Displays the help text, for the specified command.</td>
+    </tr>
+    <tr>
+        <td>Argument: cmd</td>
+        <td>Name of the command.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>Helptext for the specified command.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_merge"></a>merge
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>merge</td>
@@ -510,10 +421,11 @@ This chapter outlines the operations and their usage. A command can be called us
 </table> 
 
 
-
-###<a name="cmd_mergedir"></a>mergedir
+#### <a name="cmd_mergedir"></a>mergedir
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>mergedir</td>
@@ -545,10 +457,11 @@ This chapter outlines the operations and their usage. A command can be called us
 </table> 
 
 
-
-###<a name="cmd_ntriplify"></a>ntriplify
+#### <a name="cmd_ntriplify"></a>ntriplify
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>ntriplify</td>
@@ -580,9 +493,465 @@ This chapter outlines the operations and their usage. A command can be called us
 </table> 
 
 
-###<a name="cmd_outline"></a>outline
+#### <a name="cmd_pick"></a>pick
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>pick</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>pick &lt;infile&gt; &lt;outfile&gt; &lt;s|p|o|stmt|res&gt; &lt;s|list|?&gt; &lt;p|list|?&gt; &lt;o|list|?&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Dependant on search pattern</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Takes an input file and extracts all subjects, predicates, objects, statements or resources according to the specified pattern and outputs them into a file. 
+            A "?"-character can be used to indicate a wildcard.
+                Example: infile.nt outfile.nt o subjectlist.txt predicatelist.txt ?
+            This returns all objects whose statments match any combination of subjectlist and predicatelist. 
+        </td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The name of the input file. Sorted N-Triples are required.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Argument: return type</td>
+        <td>The kind of information to be returned; one of subject, predicate, object, statement or resource.</td>
+    </tr>
+    <tr>
+        <td>Argument: subject expression</td>
+        <td>The expression for matching the subject: A single URL, a file containing a list of URLs or a wildcard.</td>
+    </tr>
+    <tr>
+        <td>Argument: predicate expression</td>
+        <td>The expression for matching the predicate: A single URL, a file containing a list of URLs or a wildcard.</td>
+    </tr>
+    <tr>
+        <td>Argument: object expression</td>
+        <td>The expression for matching the subject: A single URL/Literal, a file containing a list of URLs or literals or a wildcard. 
+            Datatypes and language tags cannot be processed.
+        </td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An N-Triple file containing the output.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_removeduplicates"></a>removeduplicates
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>removeduplicates</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>removeduplicates &lt;infile&gt; &lt;outfile&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Line based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Removes duplicate lines from an SNT file. Keeps one line of each kind.</td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The name of the input file, requires SNT.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file containing the remaining statements.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_renameproperty"></a>renameproperty
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>renamepropterty</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>renamepropterty &lt;infile&gt; &lt;outfile&gt; &lt;property&gt; &lt;substitute&gt; [&lt;property&gt; &lt;substitute&gt;...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Statement based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Replaces properties with other properties. Requires long namespaces.</td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The name of the input file, requires SNT with long namespaces.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Argument: property</td>
+        <td>The property to be replaced. Long namespace required.</td>
+    </tr>
+    <tr>
+        <td>Argument: substitutes</td>
+        <td>The substitute property. Long namespace required.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT a copy of the input file with replaced properties.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_securelooseends"></a>securelooseends
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>securelooseends</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>securelooseends &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; &lt;substitue1&gt;[&lt;predicate2&gt; ...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Extracts resources from file B that are referenced in file A. 
+            Then reduces this resource to a meaningful string and adds it to the original resource.</td>
+    </tr>
+    <tr>
+        <td>Argument: file A</td>
+        <td>An SNT input file containing the references.</td>
+    </tr>
+    <tr>
+        <td>Argument: file B</td>
+        <td>An SNT input file containing the resources that are referenced in file A.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Argument: predicate1</td>
+        <td>A property from file A whose reference is to be looked up in file B.</td>
+    </tr>
+    <tr>
+        <td>Argument: substitute1</td>
+        <td>A property to map the meaningful string to.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file containing the resulting statements. e.g. &lt;s&gt; &lt;substitute1&gt; "meaningful string"</td>
+    </tr>
+</table> 
+
+
+
+#### <a name="cmd_sort"></a>sort
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>sort</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>sort &lt;infile&gt; &lt;outfile&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Line based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Sorts an N-Triple file in ascending order of codepoints.</td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The name of the input file, requires N-Triples, requires long namspace forms.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file containing all the statements from the input file.</td>
+    </tr>
+</table> 
+
+
+
+#### a name="cmd_split"></a>split
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>split</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>split &lt;infile&gt; &lt;outfile prefix&gt; &lt;resources per file&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Splits an SNT file into several smaller, with a given number of resources.</td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The name of the input file, requires N-Triples</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile prefix</td>
+        <td>Prefix for the output files, e.g. /home/data/part_  </td>
+    </tr>
+    <tr>
+        <td>Argument: resources per file</td>
+        <td>Number of resources per file.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>Multiple SNT files, e.g. /home/data/part_1.nt etc.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_version"></a>version
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>version</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>version</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>-</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Prints the version to screen, e.g. v0.1</td>
+    </tr>
+</table> 
+
+
+
+
+
+### <a name="experimental"></a>Experimental commands
+
+
+
+
+#### <a name="cmd_analyzetype"></a>analyzetype
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>analyzetype</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>Usage: analyzetype &lt;infile&gt; &lt;type&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Counts the occurences of literal objects for a given rdf:type in combination with one or more properties. When more 
+            properties are used, the combinations of properties are counted as well. Output is written to a CSV file. Use case example:
+            a ranking of most common first name and last name combinations for persons could be created. 
+            See also: <a href="#cmd_pigeonhole">pigeonhole</a></td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file, requires SNT.</td>
+    </tr>
+    <tr>
+        <td>Argument: type</td>
+        <td>The type of resource to be analyze e.g. foaf:Person</td>
+    </tr>
+    <tr>
+        <td>Argument: predicate</td>
+        <td>The property to examine. Requires long namespace version.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>One or more CSV files, automatically named.</td>
+    </tr>
+</table> 
+
+
+
+
+
+
+#### <a name="cmd_correct"></a>correct
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>correct</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>correct &lt;infile&gt; &lt;outfile&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Line based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Removes invalid ntriples from a given file respectively Replaces invalid character with the ?-character. </td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file, requires N-Triples.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>Name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An N-Triples file with corrected content.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_extractduplicatelinks"></a>extractduplicatelinks
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>extractduplicatelinks</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>extractduplicatelinks &lt;infile&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Statement based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Extracts statements with duplicate subjects and objects. Useful in combination with the <a href="#cmd_subtract">subtract</a> command.</td>
+    </tr>
+    <tr>
+        <td>Argument: infile</td>
+        <td>The input file, requires SNT.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>Two N-Triples files: subjects.nt contains all links that do not address their subject exclusively; 
+            objects.nt contains all links that do not address their objects exclusively.</td>
+    </tr>
+</table> 
+
+
+#### <a name="cmd_extractreferenced"></a>extractreferenced
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>extract referenced</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td> extractreferenced &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Resource based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Extracts resources from file B that are referenced in file A.</td>
+    </tr>
+    <tr>
+        <td>Argument: file A</td>
+        <td>The input file containing the references. SNT required.</td>
+    </tr>
+    <tr>
+        <td>Argument: file B</td>
+        <td>A second input file containing the referenced resources. SNT required.</td>
+    </tr>
+    <tr>
+        <td>Argument: outfile</td>
+        <td>The name of the output file. This file will contain the extractes resources.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>An SNT file containing the extracted resources.</td>
+    </tr>
+</table> 
+
+
+
+#### <a name="cmd_outline"></a>outline
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>outline</td>
@@ -625,9 +994,11 @@ This chapter outlines the operations and their usage. A command can be called us
 
 
 
-###<a name="cmd_pigeonhole"></a>pigeonhole
+#### <a name="cmd_pigeonhole"></a>pigeonhole
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>pigeonhole</td>
@@ -685,9 +1056,11 @@ This chapter outlines the operations and their usage. A command can be called us
 
 
 
-###<a name="cmd_pumpup"></a>pumpup
+#### <a name="cmd_pumpup"></a>pumpup
 
 <table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>pumpup</td>
@@ -741,205 +1114,16 @@ List of namespaces with their respective short forms.
 * sch http://schema.org/
 
 
-###<a name="cmd_removeduplicates"></a>removeduplicates
+
+
+
+
+
+#### <a name="cmd_subtract"></a>subtract
 
 <table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>removeduplicates</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>removeduplicates &lt;infile&gt; &lt;outfile&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Line based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Removes duplicate lines from an SNT file. Keeps one line of each kind.</td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The name of the input file, requires SNT.</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile</td>
-        <td>The name of the output file.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>An SNT file containing the remaining statements.</td>
-    </tr>
-</table> 
-
-###<a name="cmd_renameproperty"></a>renameproperty
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>renamepropterty</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>renamepropterty &lt;infile&gt; &lt;outfile&gt; &lt;property&gt; &lt;substitute&gt; [&lt;property&gt; &lt;substitute&gt;...]</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Statement based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Replaces properties with other properties. Requires long namespaces.</td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The name of the input file, requires SNT with long namespaces.</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile</td>
-        <td>The name of the output file.</td>
-    </tr>
-    <tr>
-        <td>Argument: property</td>
-        <td>The property to be replaced. Long namespace required.</td>
-    </tr>
-    <tr>
-        <td>Argument: substitutes</td>
-        <td>The substitute property. Long namespace required.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>An SNT a copy of the input file with replaced properties.</td>
-    </tr>
-</table> 
-
-
-###<a name="cmd_securelooseends"></a>securelooseends
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>securelooseends</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>securelooseends &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; &lt;substitue1&gt;[&lt;predicate2&gt; ...]</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Resource based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Extracts resources from file B that are referenced in file A. 
-            Then reduces this resource to a meaningful string and adds it to the original resource.</td>
-    </tr>
-    <tr>
-        <td>Argument: file A</td>
-        <td>An SNT input file containing the references.</td>
-    </tr>
-    <tr>
-        <td>Argument: file B</td>
-        <td>An SNT input file containing the resources that are referenced in file A.</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile</td>
-        <td>The name of the output file.</td>
-    </tr>
-    <tr>
-        <td>Argument: predicate1</td>
-        <td>A property from file A whose reference is to be looked up in file B.</td>
-    </tr>
-    <tr>
-        <td>Argument: substitute1</td>
-        <td>A property to map the meaningful string to.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>An SNT file containing the resulting statements. e.g. &lt;s&gt; &lt;substitute1&gt; "meaningful string"</td>
-    </tr>
-</table> 
-
-
-
-###<a name="cmd_sort"></a>sort
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>sort</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>sort &lt;infile&gt; &lt;outfile&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Line based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Sorts an N-Triple file in ascending order of codepoints.</td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The name of the input file, requires N-Triples, requires long namspace forms.</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile</td>
-        <td>The name of the output file.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>An SNT file containing all the statements from the input file.</td>
-    </tr>
-</table> 
-
-
-
-###<a name="cmd_split"></a>split
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>split</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>split &lt;infile&gt; &lt;outfile prefix&gt; &lt;resources per file&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>Resource based</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Splits an SNT file into several smaller, with a given number of resources.</td>
-    </tr>
-    <tr>
-        <td>Argument: infile</td>
-        <td>The name of the input file, requires N-Triples</td>
-    </tr>
-    <tr>
-        <td>Argument: outfile prefix</td>
-        <td>Prefix for the output files, e.g. /home/data/part_  </td>
-    </tr>
-    <tr>
-        <td>Argument: resources per file</td>
-        <td>Number of resources per file.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>Multiple SNT files, e.g. /home/data/part_1.nt etc.</td>
-    </tr>
-</table> 
-
-
-###<a name="cmd_subtract"></a>subtract
-
-<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
     <tr>
         <td>Name</td>
         <td>subtract</td>
@@ -975,58 +1159,7 @@ List of namespaces with their respective short forms.
 </table> 
 
 
-###<a name="cmd_version"></a>version
 
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>version</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>version</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Prints the version to screen, e.g. v0.1</td>
-    </tr>
-</table> 
-
-
-
-
-###<a name="cmd_help"></a>help
-
-<table border="1" style="width:100%">
-    <tr>
-        <td>Name</td>
-        <td>help</td>
-    </tr>
-    <tr>
-        <td>Usage</td>
-        <td>help &lt;cmd&gt;</td>
-    </tr>
-    <tr>
-        <td>Type</td>
-        <td>-</td>
-    </tr>
-    <tr>
-        <td>Description</td>
-        <td>Displays the help text, for the specified command.</td>
-    </tr>
-    <tr>
-        <td>Argument: cmd</td>
-        <td>Name of the command.</td>
-    </tr>
-    <tr>
-        <td>Output</td>
-        <td>Helptext for the specified command.</td>
-    </tr>
-</table> 
 
 ##<a name="gettingstarted"></a>Getting Started
 
