@@ -46,13 +46,13 @@ import org.openrdf.rio.RDFWriter;
 public class BlockCommand implements ICMD {
 
     private String NAME = "block";
-    private String EXPLANATION = "Separates the input data according to its literals alphabetic order.";
-    private String HELPTEXT = "Usage: " + NAME + " <infile> <outputdir> <predicate> \n" + EXPLANATION;
+    private String EXPLANATION = "Splits the input data according to its literals alphabetic order.";
+    private String HELPTEXT = "Usage: " + NAME + " <infile> <outputdir> <predicate> <char offset> <char length>\n" + EXPLANATION;
 
-    private Map<Character, File> map = null;
+    private Map<String, File> map = null;
 
     public BlockCommand() {
-        map = new HashMap<Character, File>();
+        map = new HashMap<String, File>();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class BlockCommand implements ICMD {
     @Override
     public CommandExecutionResult execute(String[] args) throws CommandExecutionException {
         //check args
-        if (args.length < 4) {
+        if (args.length < 6) {
             return new CommandExecutionResult(false, "Invalid parameter count.");
         }
 
@@ -95,6 +95,28 @@ public class BlockCommand implements ICMD {
         //this predicate marks the object to examine
         String predicate = args[3];
 
+        //Index of first character in object to use for blocking
+        final int offset;
+        try{
+            offset = Integer.valueOf(args[4]);
+        }catch(NumberFormatException ex){
+            return new CommandExecutionResult(false, "Invalid offset parameter: " + args[4]);
+        }
+        if(offset <0){
+            return new CommandExecutionResult(false, "Invalid offset parameter: " + args[4]);
+        }
+        
+        //Length of substring in object to use for blocking
+        final int length;
+        try{
+            length = Integer.valueOf(args[5]);
+        }catch(NumberFormatException ex){
+            return new CommandExecutionResult(false, "Invalid length parameter: " + args[5]);
+        }
+        if(length < 1){
+            return new CommandExecutionResult(false, "Invalid length parameter: " + args[5]);
+        }
+        
         //Iterate over all !resources! from inFile...
         ResourcePullReader rpReader = new ResourcePullReader(inFile);
         rpReader.load();
@@ -106,14 +128,18 @@ public class BlockCommand implements ICMD {
                 if (res[i].getPredicate().stringValue().equals(predicate)) {//if is right property....
                     String obj = res[i].getObject().stringValue();
                     if (obj.length() > 0) { //...process its object
-                        char c = obj.charAt(0);
+                        String seq = null;
+                        try{
+                            seq = obj.substring(offset, offset+length);
+                        }catch(IndexOutOfBoundsException ex){
+                            seq = obj.substring(0, obj.length()-1); //If index and length invalid, then use the whole word.
+                        }
+                       
                         //create a writer for the first letters file or use an existing one
-                        File file = map.get(c);
+                        File file = map.get(seq);
                         if (file == null) { 
-                            int asInt = (int) c;
-                            String fileName = "u" + Integer.toHexString(asInt).toUpperCase() + ".nt";
-                            file = new File(outputDir, fileName);
-                            map.put(c, file);
+                            file = new File(outputDir, deriveFileName(seq));
+                            map.put(seq, file);
                         }
                         //write the whole resource each time a propterty was found
                         try {
@@ -143,6 +169,22 @@ public class BlockCommand implements ICMD {
         System.out.println("Done");
         return new CommandExecutionResult(true);
 
+    }
+    
+    
+    /**
+     * Convert the character of the string into their codepoints and concatenates them. E.g. abc -> u61u62u63.nt
+     * @param seq
+     * @return 
+     */
+    private static String deriveFileName(String seq){
+        StringBuffer fileName = new StringBuffer(seq.length()*4);
+        for(int i=0; i<seq.length();i++){
+            int asInt = (int) seq.charAt(i);
+            fileName.append('u').append(Integer.toHexString(asInt).toUpperCase());
+        }
+        fileName.append(".nt");
+        return fileName.toString();
     }
 
     /**
