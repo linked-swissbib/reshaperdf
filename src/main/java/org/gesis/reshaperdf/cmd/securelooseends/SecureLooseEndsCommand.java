@@ -133,7 +133,7 @@ public class SecureLooseEndsCommand implements ICMD {
             return new CommandExecutionResult(true);
         }
 
-        //Step 2: sort these URIs by their objects
+        //Step 2: sort these statements by their objects
         System.out.println("Sorting");
         Collections.sort(stmtList, new StatementsComparatorO());
 
