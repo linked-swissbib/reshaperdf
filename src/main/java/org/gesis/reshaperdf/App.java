@@ -94,29 +94,35 @@ public class App {
         //instanciate the command repository, the help command is extra because 
         //it depends on the other commands
         CommandRepository repo = new CommandRepository();
-        repo.add(new VersionCommand(VERSION));
-        repo.add(new NTriplifyCommand());
-        repo.add(new SortCommand());
-        repo.add(new MergeCommand());
-        repo.add(new ExtractResourcesCommand());
-        repo.add(new CorrectCommand());
-        repo.add(new SplitCommand());
-        repo.add(new CheckSortingCommand());
-        repo.add(new MergeDirCommand());
-        repo.add(new GetEnrichmentCommand());
-        repo.add(new RemoveDuplicatesCommand());
-        repo.add(new PumpupCommand());
+
+        //add command for everyday use
         repo.add(new BlockCommand());
-        repo.add(new ExtractDuplicateLinksCommand());
-        repo.add(new SubtractCommand());
-        repo.add(new RenamePropertyCommand());
+        repo.add(new CheckSortingCommand());
+        repo.add(new ExtractResourcesCommand());        
         repo.add(new FilterCommand());
+        repo.add(new GetEnrichmentCommand());
+        //help cmd is an internal cmd
+        repo.add(new MergeCommand());
+        repo.add(new MergeDirCommand());
+        repo.add(new NTriplifyCommand());
+        repo.add(new PickCommand());
+        repo.add(new RemoveDuplicatesCommand());
+        repo.add(new RenamePropertyCommand());
+        repo.add(new SecureLooseEndsCommand());
+        repo.add(new SortCommand());
+        repo.add(new SplitCommand());
+        repo.add(new VersionCommand(VERSION));
+
+        // add commands for experimental use
         repo.add(new AnalyzeTypeCommand());
-        repo.add(new PigeonholeCommand());
+        repo.add(new CorrectCommand());
+        repo.add(new ExtractDuplicateLinksCommand());
         repo.add(new ExtractReferencedCommand());
         repo.add(new OutlineCommand());
-        repo.add(new SecureLooseEndsCommand());
-        repo.add(new PickCommand());
+        repo.add(new PigeonholeCommand());
+        repo.add(new PumpupCommand()); 
+        repo.add(new SubtractCommand());
+ 
         
         if (args.length == 0) {//check input
             printCommandList(repo); //print command list
