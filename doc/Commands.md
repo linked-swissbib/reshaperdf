@@ -12,7 +12,7 @@ A toolset to work with N-Triples
     </tr>
     <tr>
         <td>Last change:</td>
-        <td>09. Jan. 2016</td>
+        <td>10. Jan. 2016</td>
     </tr>
     <tr>
         <td>Please note:</td>
@@ -45,7 +45,7 @@ A toolset to work with N-Triples
         * [sort](#cmd_sort)
         * [split](#cmd_split)
         * [version](#cmd_version)
-    * [Experimental commands](#experimental)
+    * [Special commands](#special)
         * [analyzetype](#cmd_analyzetype)
         * [correct](#cmd_correct)
         * [extractduplicatelinks](#cmd_extractduplicatelinks)
@@ -128,8 +128,8 @@ This chapter outlines the operations and their usage. A command can be called us
 `java -jar reshaperdf-1.0-SNAPSHOT.jar <command> [<command parameter> ...]`
 
 The chapter is subdivided into a section that is about commands intended for 
-everyday use and a section about experimental commands that do not have a 
-purpose in everyday use but but become handy for e.g. data analysis.
+everyday use and a section about special commands that do not have a 
+purpose in everyday use but but become handy in exotic use cases.
 
 
 ### <a name="everydayuse"></a>Commands for everyday use
@@ -785,7 +785,7 @@ purpose in everyday use but but become handy for e.g. data analysis.
 
 
 
-### <a name="experimental"></a>Experimental commands
+### <a name="special"></a>Special commands
 
 
 
