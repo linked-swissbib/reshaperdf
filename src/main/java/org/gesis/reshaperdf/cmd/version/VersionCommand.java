@@ -28,8 +28,8 @@ import org.gesis.reshaperdf.cmd.boundary.ICMD;
 public class VersionCommand implements ICMD{
 
     public String NAME = "version";
-    public String EXPLANATION = "Prints the version to screen.";
-    public String HELPTEXT = "Prints the version to screen, e.g. v0.1";
+    public String EXPLANATION = "Prints the version to the screen, e.g. v0.1 .";
+    public String HELPTEXT = "Usage: "+NAME+"\n"+EXPLANATION;
     public String version = "";
     
     public VersionCommand(String version){

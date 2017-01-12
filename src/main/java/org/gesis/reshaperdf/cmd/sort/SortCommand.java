@@ -26,14 +26,14 @@ import org.gesis.reshaperdf.utils.sort.Sort;
 import org.openrdf.rio.RDFHandlerException;
 
 /**
- * @author Felix Bensmann Sorts an NTriple file alphabetically. Uses the sort
+ * @author Felix Bensmann Sorts an N-Triple file alphabetically. Uses the sort
  * utilities from the ...utils.sort-package.
  */
 public class SortCommand implements ICMD, Thread.UncaughtExceptionHandler {
 
     public String NAME = "sort";
-    public String EXPLANATION = "Sorts an NTriple file.";
-    public String HELPTEXT = "Usage: sort <infile> <outfile>\nSorts an NTriple file.";
+    public String EXPLANATION = "Sorts an N-Triple file in ascending order of codepoints.";
+    public String HELPTEXT = "Usage: "+NAME+" <input file> <output file>\n"+EXPLANATION;
 
     @Override
     public String getName() {

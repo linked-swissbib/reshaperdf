@@ -50,7 +50,9 @@ import org.openrdf.rio.helpers.StatementCollector;
 public class GetEnrichmentCommand implements ICMD {
 
     private static final String NAME = "getenrichment";
-    private static final String EXPLANATION = "Extracts linked resources from a file of sorted NTriples.";
+    private static final String EXPLANATION = "Extracts resources from an SNT file, that are adressed by the object of an SNT link file. "
+            + "Missing resources in the resources file are ignored. "
+            + "The subjects of the extracted statements are altered to the subject of the link.";
     private static final String HELPTEXT = "Usage: getenrichment <linkfile> <resource file> <outfile> \n" + EXPLANATION;
 
     @Override

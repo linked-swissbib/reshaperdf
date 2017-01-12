@@ -23,41 +23,41 @@ A toolset to work with N-Triples
 
 ## TOC
 
-* [Introduction](#introduction)
-* [Sorted N-Triples](#sortedntriples)
-* [Terms](#Terms)
-* [Setup](#Setup)
-* [Commands](#commands)
-    * [Commands for everyday use](#everydayuse)
-        * [block](#cmd_block)
-        * [checksorting](#cmd_checksorting)
-        * [extractresources](#cmd_extractresources)
-        * [filter](#cmd_filter)
-        * [getenrichment](#cmd_getenrichment)
-        * [help](#cmd_help)
-        * [merge](#cmd_merge)
-        * [mergedir](#cmd_mergedir)
-        * [ntriplify](#cmd_ntriplify)
-        * [pick](#cmd_pick)
-        * [removeduplicates](#cmd_removeduplicates)
-        * [renameproperty](#cmd_renameproperty)
-        * [securelooseends](#cmd_securelooseends)
-        * [sort](#cmd_sort)
-        * [split](#cmd_split)
-        * [version](#cmd_version)
-    * [Special commands](#special)
-        * [analyzetype](#cmd_analyzetype)
-        * [correct](#cmd_correct)
-        * [extractduplicatelinks](#cmd_extractduplicatelinks)
-        * [extractreferenced](#cmd_extractreferenced)
-        * [outline](#cmd_outline)
-        * [pigeonhole](#cmd_pigeonhole)
-        * [pumpup](#cmd_pumpup)
-        * [subtract](#cmd_subtract)
-* [Getting Started](#gettingstarted)
+* [Introduction](#sec:introduction)
+* [Sorted N-Triples](#sec:sortedntriples)
+* [Terms](#sec:terms)
+* [Setup](#sec:setup)
+* [Commands](#sec:commands)
+    * [Commands for everyday use](#sec:everydayuse)
+        * [block](#cmd:block)
+        * [checksorting](#cmd:checksorting)
+        * [extractresources](#cmd:extractresources)
+        * [filter](#cmd:filter)
+        * [getenrichment](#cmd:getenrichment)
+        * [help](#cmd:help)
+        * [merge](#cmd:merge)
+        * [mergedir](#cmd:mergedir)
+        * [ntriplify](#cmd:ntriplify)
+        * [pick](#cmd:pick)
+        * [removeduplicates](#cmd:removeduplicates)
+        * [renameproperty](#cmd:renameproperty)
+        * [securelooseends](#cmd:securelooseends)
+        * [sort](#cmd:sort)
+        * [split](#cmd:split)
+        * [version](#cmd:version)
+    * [Special commands](#sec:special)
+        * [analyzetype](#cmd:analyzetype)
+        * [correct](#cmd:correct)
+        * [extractduplicatelinks](#cmd:extractduplicatelinks)
+        * [extractreferenced](#cmd:extractreferenced)
+        * [outline](#cmd:outline)
+        * [pigeonhole](#cmd:pigeonhole)
+        * [pumpup](#cmd:pumpup)
+        * [subtract](#cmd:subtract)
+* [Getting Started](#sec:gettingstarted)
 
 
-## <a name="introduction"></a>Introduction
+## Introduction <a name="sec:introduction"></a>
 Processing RDF mass data can be a prone job. Common triplestores offer certain 
 functionality for querying and manipulating RDF data but only few can handle 
 mass data (let's say more than 200 Mio. statements) at the same time. 
@@ -79,7 +79,7 @@ efficiently organize and reshape their data without the need of a triplestore.
 
 
 
-## <a name="sortedntriples"></a>Sorted N-Triples
+## Sorted N-Triples <a name="sec:sortedntriples"></a>
 When there is an RDF dump file to process, users cannot take for granted that
 stored resources are held together. This is especially true for the N-Triple
 file format but also applies for the RDF/XML file format that even provides a way to 
@@ -107,12 +107,12 @@ enrichment process.
 The flexible nature of this tool is especially helpful with heterogeneous 
 datasets.
 
-## <a name="setup"></a>Setup
+## Setup <a name="sec:setup"></a>
 
 Copy the JAR-Archive reshaperdf-1.0-SNAPSHOT.jar and the lib folder to a directory of your choice.
 The software requires at least JRE 1.7 .
 
-## <a name="terms"></a>Terms
+## Terms <a name="sec:terms"></a>
 
 * **triple and statement** In this application a triple and a statement as known from the RDF context are the same thing. They always fit in one line.
 * **line based** An operation is called that if it understands triples as a string line.
@@ -121,7 +121,7 @@ The software requires at least JRE 1.7 .
 
 
 
-## <a name="commands"></a>Commands
+## Commands <a name="sec:commands"></a>
 
 This chapter outlines the operations and their usage. A command can be called using the following syntax:
 
@@ -132,11 +132,18 @@ everyday use and a section about special commands that do not have a
 purpose in everyday use but but become handy in exotic use cases.
 The special commands are available in their own branch.
 
+At no point any of the commands will overwrite an input file, 
+rather they produce a new file with the desired changes. 
+However existing files will be overwritten by output files without notification.
 
-### <a name="everydayuse"></a>Commands for everyday use
+Comments are usually not processed by the commands.
+Most commands require the long forms of a URI.
 
 
-#### <a name="cmd_block"></a>block
+### Commands for everyday use <a name="sec:everydayuse"></a>
+
+
+#### block <a name="cmd:block"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -147,7 +154,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>block &lt;infile&gt; &lt;outputdir&gt; &lt;predicate&gt; </td>
+        <td>block &lt;input file&gt; &lt;output dir&gt; &lt;predicate&gt; &lt;char offset&gt; &lt;char length&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -155,19 +162,27 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Separates the input file into blocks with resources that share the first letter of the properties value. Files that exceed a statement count of 100 000 are further splitted into parts of 100 000, except for the last of course.</td>
+        <td>Assigns the resources of the input file to blocks according to a given character sequence of a given property's value. One block is one file. Files that exceed a statement count of 100 000 are further split into files of 100 000.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file, requires SNT.</td>
     </tr>
     <tr>
-        <td>Argument: outputdir</td>
-        <td>Directory to store the output in.</td>
+        <td>Argument: output dir</td>
+        <td>The Directory to store the output in.</td>
     </tr>
     <tr>
         <td>Argument: predicate</td>
         <td>The property to block by. Requires long namespace version.</td>
+    </tr>
+    <tr>
+        <td>Argument: char offset</td>
+        <td>The offset of the character sequence in the property's value. Use 0 for no offset. If the offset is higher than the value's length, then the whole property value will be evaluated.</td>
+    </tr>
+    <tr>
+        <td>Argument: char length</td>
+        <td>The lenght of the character sequence in the property's value. If the length is higer than the value's length, then the whole property value will be evaluated.</td>
     </tr>
     <tr>
         <td>Output</td>
@@ -176,7 +191,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_checksorting"></a>checksorting
+#### checksorting <a name="cmd:checksorting"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -195,7 +210,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Checks the input file for proper sorting. This sorting differs from line sorting in that it ignores the control signs.</td>
+        <td>Checks the input file for proper sorting. This sorting differs from line sorting in the fact that it ignores the control characters.</td>
     </tr>
     <tr>
         <td>Argument: infile</td>
@@ -209,7 +224,7 @@ The special commands are available in their own branch.
 
 
 
-#### <a name="cmd_extractresources"></a>extractresources
+#### extractresources <a name="cmd:extractresources"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -259,9 +274,10 @@ The special commands are available in their own branch.
         <td>An SNT file with the extracted resources.</td>
     </tr>
 </table>
+See also [pick](#cmd:pick).
 
 
-#### <a name="cmd_filter"></a>filter
+#### filter <a name="cmd:filter"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -272,7 +288,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>filter &lt;whitelist|blacklist&gt; &lt;source file&gt; &lt;filter file&gt; &lt;outfile&gt; </td>
+        <td>filter &lt;whitelist|blacklist&gt; &lt;input file&gt; &lt;filter file&gt; &lt;output file&gt; </td>
     </tr>
     <tr>
         <td>Type</td>
@@ -284,10 +300,10 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Argument: whitelist|blacklist</td>
-        <td>Keyword either whitelist to indicate that a whitelist is to be used or blacklist to indicate that a blacklist is to be used. Blacklist is not yet implemented.</td>
+        <td>Either "whitelist" or "blacklist" to indicate what kind of filter is to be used.</td>
     </tr>
     <tr>
-        <td>Argument: source file</td>
+        <td>Argument: input file</td>
         <td>File to filter</td>
     </tr>
     <tr>
@@ -295,7 +311,7 @@ The special commands are available in their own branch.
         <td>A text file containing the properties to be subject to the filter. Is a simple line-based text file.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>Name of the file to store the output in.</td>
     </tr>
     <tr>
@@ -305,7 +321,7 @@ The special commands are available in their own branch.
 </table>
 
 
-#### <a name="cmd_getenrichment"></a>getenrichment
+#### getenrichment <a name="cmd:getenrichment"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -336,7 +352,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Argument: outfile</td>
-        <td>Name of the output file. The file with the extracted resources.</td>
+        <td>Name of the output file. The file containing the extracted resources.</td>
     </tr>
     <tr>
         <td>Output</td>
@@ -346,7 +362,7 @@ The special commands are available in their own branch.
 
 
 
-#### <a name="cmd_help"></a>help
+#### help <a name="cmd:help"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -378,7 +394,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_merge"></a>merge
+#### merge <a name="cmd:merge"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -420,9 +436,9 @@ The special commands are available in their own branch.
         <td>An SNT file with the merged results.</td>
     </tr>
 </table> 
+For a simple concatenation you may also try "$ cat a.nt b.nt c.nt > mergefile.nt" in a Linux environment.
 
-
-#### <a name="cmd_mergedir"></a>mergedir
+#### mergedir <a name="cmd:mergedir"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -433,7 +449,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>mergedir &lt;indir&gt; &lt;outfile&gt;</td>
+        <td>mergedir &lt;input dir&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -441,14 +457,14 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Merges NTriple files that are in the same directory. Extends namespaces to its long form.</td>
+        <td>Merges SNT files that are in the same directory. Extends namespaces to its long form.</td>
     </tr>
     <tr>
-        <td>Argument: indir</td>
+        <td>Argument: input dir</td>
         <td>The name of the directory containing the SNT files to be merged. Subdirectories are also searched.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>An SNT file containing the merged statements.</td>
     </tr>
     <tr>
@@ -456,9 +472,11 @@ The special commands are available in their own branch.
         <td>An SNT file with the merged results.</td>
     </tr>
 </table> 
+For a simple concatenation you may also try "$ cat *.nt > mergefile.nt" in a Linux environment.
 
 
-#### <a name="cmd_ntriplify"></a>ntriplify
+
+#### ntriplify <a name="cmd:ntriplify"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -469,7 +487,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>ntriplify &lt;input dir&gt; &lt;outfile&gt;</td>
+        <td>ntriplify &lt;input dir&gt; &lt;output file&gt; [&lt;JSON-LD context URI&gt; &lt;JSON-LD context file&gt;][...]</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -477,24 +495,30 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Takes an input directory and merges all RDF files into one N-Triple file.</td>
+        <td>Converts all RDF files from a directory into N-Triples and merges them into a single file.</td>
     </tr>
     <tr>
-        <td>Argument: indir</td>
+        <td>Argument: input dir</td>
         <td>The name of the directory containing the RDF files. Subdirectories are also searched.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
+        <td>Argument: JSON-LD context URIs and files</td>
+        <td>Optional. It is possible to state a mapping of JSON-LD contexts and local JSON-LD context files. 
+            The context-URIs and file paths will have to be inserted in pairs separated by a space. 
+            The command will use the local contexts whenever the remote context is not available.</td>
+    </tr>
+    <tr>
         <td>Output</td>
-        <td>An N-Triple file containing the merged statements.</td>
+        <td>An N-Triple file containing the converted statements.</td>
     </tr>
 </table> 
 
 
-#### <a name="cmd_pick"></a>pick
+#### pick <a name="cmd:pick"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -505,7 +529,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>pick &lt;infile&gt; &lt;outfile&gt; &lt;s|p|o|stmt|res&gt; &lt;s|list|?&gt; &lt;p|list|?&gt; &lt;o|list|?&gt;</td>
+        <td>pick &lt;input file&gt; &lt;output file&gt; &lt;s|p|o|stmt|res&gt; &lt;s|list|?&gt; &lt;p|list|?&gt; &lt;o|list|?&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -520,11 +544,11 @@ The special commands are available in their own branch.
         </td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The name of the input file. Sorted N-Triples are required.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
@@ -552,7 +576,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_removeduplicates"></a>removeduplicates
+#### removeduplicates <a name="cmd:removeduplicates"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -563,7 +587,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>removeduplicates &lt;infile&gt; &lt;outfile&gt;</td>
+        <td>removeduplicates &lt;input file&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -571,14 +595,14 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Removes duplicate lines from an SNT file. Keeps one line of each kind.</td>
+        <td>Removes duplicate statements from an SNT file. Keeps one line of each kind.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The name of the input file, requires SNT.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
@@ -588,18 +612,18 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_renameproperty"></a>renameproperty
+#### renameproperty <a name="cmd:renameproperty"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
     <col width="80%">
     <tr>
         <td>Name</td>
-        <td>renamepropterty</td>
+        <td>renameproperty</td>
     </tr>
     <tr>
         <td>Usage</td>
-        <td>renamepropterty &lt;infile&gt; &lt;outfile&gt; &lt;property&gt; &lt;substitute&gt; [&lt;property&gt; &lt;substitute&gt;...]</td>
+        <td>renameproperty &lt;input file&gt; &lt;output file&gt; &lt;property&gt; &lt;substitute&gt; [&lt;property&gt; &lt;substitute&gt;...]</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -607,14 +631,14 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Replaces properties with other properties. Requires long namespaces.</td>
+        <td>Renames a property. Requires long namespaces.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The name of the input file, requires SNT with long namespaces.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
@@ -632,7 +656,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_securelooseends"></a>securelooseends
+#### securelooseends <a name="cmd:securelooseends"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -643,7 +667,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>securelooseends &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; &lt;substitue1&gt;[&lt;predicate2&gt; ...]</td>
+        <td>securelooseends &lt;file A&gt; &lt;file B&gt; &lt;output file&gt; &lt;predicate1&gt; &lt;substitue1&gt;[&lt;predicate2&gt; ...]</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -663,7 +687,7 @@ The special commands are available in their own branch.
         <td>An SNT input file containing the resources that are referenced in file A.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
@@ -682,7 +706,7 @@ The special commands are available in their own branch.
 
 
 
-#### <a name="cmd_sort"></a>sort
+#### sort <a name="cmd:sort"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -693,22 +717,22 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>sort &lt;infile&gt; &lt;outfile&gt;</td>
+        <td>sort &lt;input file&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
-        <td>Line based</td>
+        <td>statement based</td>
     </tr>
     <tr>
         <td>Description</td>
         <td>Sorts an N-Triple file in ascending order of codepoints.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The name of the input file, requires N-Triples, requires long namspace forms.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
@@ -716,10 +740,10 @@ The special commands are available in their own branch.
         <td>An SNT file containing all the statements from the input file.</td>
     </tr>
 </table> 
+See also [checksorting](#cmd:checksorting).
 
 
-
-#### a name="cmd_split"></a>split
+#### split <a name="cmd:split"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -730,7 +754,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>split &lt;infile&gt; &lt;outfile prefix&gt; &lt;resources per file&gt;</td>
+        <td>split &lt;input file&gt; &lt;output file prefix&gt; &lt;resources per file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -738,14 +762,14 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Splits an SNT file into several smaller, with a given number of resources.</td>
+        <td>Splits an SNT file into several smaller files, with a given number of resources.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
-        <td>The name of the input file, requires N-Triples</td>
+        <td>Argument: input file</td>
+        <td>The name of the input file, requires SNT.</td>
     </tr>
     <tr>
-        <td>Argument: outfile prefix</td>
+        <td>Argument: output file prefix</td>
         <td>Prefix for the output files, e.g. /home/data/part_  </td>
     </tr>
     <tr>
@@ -759,7 +783,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_version"></a>version
+#### version <a name="cmd:version"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -778,7 +802,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Prints the version to screen, e.g. v0.1</td>
+        <td>Prints the version to the screen, e.g. v0.1 .</td>
     </tr>
 </table> 
 
@@ -786,12 +810,12 @@ The special commands are available in their own branch.
 
 
 
-### <a name="special"></a>Special commands
+### Special commands <a name="sec:special"></a>
 
 
 
 
-#### <a name="cmd_analyzetype"></a>analyzetype
+#### analyzetype <a name="cmd:analyzetype"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -813,7 +837,7 @@ The special commands are available in their own branch.
         <td>Counts the occurences of literal objects for a given rdf:type in combination with one or more properties. When more 
             properties are used, the combinations of properties are counted as well. Output is written to a CSV file. Use case example:
             a ranking of most common first name and last name combinations for persons could be created. 
-            See also: <a href="#cmd_pigeonhole">pigeonhole</a></td>
+            See also: <a href="#cmd:pigeonhole">pigeonhole</a></td>
     </tr>
     <tr>
         <td>Argument: infile</td>
@@ -837,8 +861,7 @@ The special commands are available in their own branch.
 
 
 
-
-#### <a name="cmd_correct"></a>correct
+#### correct <a name="cmd:correct"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -874,7 +897,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_extractduplicatelinks"></a>extractduplicatelinks
+#### extractduplicatelinks <a name="cmd:extractduplicatelinks"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -893,7 +916,7 @@ The special commands are available in their own branch.
     </tr>
     <tr>
         <td>Description</td>
-        <td>Extracts statements with duplicate subjects and objects. Useful in combination with the <a href="#cmd_subtract">subtract</a> command.</td>
+        <td>Extracts statements with duplicate subjects and objects. Useful in combination with the <a href="#cmd:subtract">subtract</a> command.</td>
     </tr>
     <tr>
         <td>Argument: infile</td>
@@ -907,7 +930,7 @@ The special commands are available in their own branch.
 </table> 
 
 
-#### <a name="cmd_extractreferenced"></a>extractreferenced
+#### extractreferenced <a name="cmd:extractreferenced"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -948,7 +971,7 @@ The special commands are available in their own branch.
 
 
 
-#### <a name="cmd_outline"></a>outline
+#### outline <a name="cmd:outline"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -969,7 +992,7 @@ The special commands are available in their own branch.
         <td>Description</td>
         <td>Creates literal representations for each resource in a file. 
             The representation is mapped to a given property. 
-            See also: <a href="#cmd_securelooseends">securelooseends</a>  </td>
+            See also: <a href="#cmd:securelooseends">securelooseends</a>  </td>
     </tr>
     <tr>
         <td>Argument: infile</td>
@@ -995,7 +1018,7 @@ The special commands are available in their own branch.
 
 
 
-#### <a name="cmd_pigeonhole"></a>pigeonhole
+#### pigeonhole <a name="cmd:pigeonhole"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -1023,7 +1046,7 @@ The special commands are available in their own branch.
             are looked up in the CSV table. If the resource does not contain all of the properties stated in the CSV then it is written to file C. 
             If a properties combination has an entry in the table then the resource is written to file A. 
             If a certain combination is not present in the table, then the resource is written to file B. 
-            See also: <a href="#cmd_analyzetype">analyzetype</a>.  </td>
+            See also: <a href="#cmd:analyzetype">analyzetype</a>.  </td>
     </tr>
     <tr>
         <td>Argument: infile</td>
@@ -1057,7 +1080,7 @@ The special commands are available in their own branch.
 
 
 
-#### <a name="cmd_pumpup"></a>pumpup
+#### pumpup <a name="cmd:pumpup"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -1120,7 +1143,7 @@ List of namespaces with their respective short forms.
 
 
 
-#### <a name="cmd_subtract"></a>subtract
+#### subtract <a name="cmd:subtract"></a>
 
 <table border="1" style="width:100%">
     <col width="20%">
@@ -1162,7 +1185,7 @@ List of namespaces with their respective short forms.
 
 
 
-##<a name="gettingstarted"></a>Getting Started
+## Getting Started <a name="sec:gettingstarted"></a>
 
 Some steps to get started:
 

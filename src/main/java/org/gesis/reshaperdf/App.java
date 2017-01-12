@@ -15,7 +15,6 @@
  * License along with this program; if not, see 
  * http://www.gnu.org/licenses/ .
  */
-
 package org.gesis.reshaperdf;
 
 import org.gesis.reshaperdf.cmd.analyzetype.AnalyzeTypeCommand;
@@ -56,32 +55,28 @@ import org.gesis.reshaperdf.cmd.pick.PickCommand;
  * as well and therefor be processed just like the original dataset. Apart from
  * extraction merging is possible, reshaping literal data is possible, removing
  * duplicates is possible and so on.
- * 
+ *
  * The general syntax is:
- * 
- * Get a list of available commands
- * java -jar reshaperdf.jar
- * 
- * Get a short description for available commands
- * java -jar reshaperdf.jar help
- * 
- * Get the help text for a command:
- * java -jar reshaperdf.jar help <command>
- * 
- * Issue a command
- * java -jar reshaperdf.jar <command> [<args>]
- * 
+ *
+ * Get a list of available commands java -jar reshaperdf.jar
+ *
+ * Get a short description for available commands java -jar reshaperdf.jar help
+ *
+ * Get the help text for a command: java -jar reshaperdf.jar help <command>
+ *
+ * Issue a command java -jar reshaperdf.jar <command> [<args>]
+ *
  * @author Felix Bensmann
  */
 public class App {
 
     //Version
     private static final String VERSION = "v0.1";
-    
+
     //build in cmds
     private static final String CMD_HELP = "help";
-    private static final String CMD_HELP_EXPLANATION = "Displays a helpt text.";
-    private static final String CMD_HELP_TEXT = "Usage: help <cmd>\nDisplays informaton about a specific command.";
+    private static final String CMD_HELP_EXPLANATION = "Displays informaton about a specific command.";
+    private static final String CMD_HELP_TEXT = "Usage: help <cmd>\n"+CMD_HELP_EXPLANATION;
 
     /**
      * Main routine. Reads the command line args and determines what commands
@@ -98,7 +93,7 @@ public class App {
         //add command for everyday use
         repo.add(new BlockCommand());
         repo.add(new CheckSortingCommand());
-        repo.add(new ExtractResourcesCommand());        
+        repo.add(new ExtractResourcesCommand());
         repo.add(new FilterCommand());
         repo.add(new GetEnrichmentCommand());
         //help cmd is an internal cmd
@@ -125,30 +120,30 @@ public class App {
  
         
         if (args.length == 0) {//check input
-            printCommandList(repo); //print command list
-        } else {
-            if (args[0].equalsIgnoreCase(CMD_HELP)) { //handle help command
-                handleHelp(args, repo);
-            } else { //chose a suitable command
-                ICMD cmd = repo.getCommand(args[0]);
-                if (cmd == null) {
-                    printUsageError("No such command.");
+            //print command list
+            System.out.println("Try \"help <cmd>\" with one of the commands or refer to the documentation.");
+            printCommandList(repo); 
+        } else if (args[0].equalsIgnoreCase(CMD_HELP)) { //handle help command, this command needs to know the other commands, so it is handled separately.
+            handleHelp(args, repo);
+        } else { //chose a suitable command
+            ICMD cmd = repo.getCommand(args[0]);
+            if (cmd == null) {
+                printUsageError("No such command.");
+                System.exit(-1);
+            }
+            try { //execute the command
+                CommandExecutionResult result = cmd.execute(args);
+                if (result.isSuccessful()) {
+                    /* freu */
+                    //successful command
+                    System.exit(0);
+                } else {
+                    printUsageError(result.getErrorText());
                     System.exit(-1);
                 }
-                try { //execute the command
-                    CommandExecutionResult result = cmd.execute(args);
-                    if (result.isSuccessful()) {
-                        /* freu */
-                        //successful command
-                        System.exit(0);
-                    } else {
-                        printUsageError(result.getErrorText());
-                        System.exit(-1);
-                    }
-                } catch (CommandExecutionException ex) {
-                    printSystemError(ex.getMessage());
-                    System.exit(-1);
-                }
+            } catch (CommandExecutionException ex) {
+                printSystemError(ex.getMessage());
+                System.exit(-1);
             }
         }
         System.exit(0);
@@ -156,11 +151,12 @@ public class App {
 
     /**
      * Handles the help command.
+     *
      * @param args
-     * @param repo 
+     * @param repo
      */
     private static void handleHelp(String[] args, CommandRepository repo) {
-        if (args.length == 1) { 
+        if (args.length == 1) { //this is "reshaperdf help" then
             printHelp(repo); //print short description of every command
         } else if (args.length == 2) {
             printHelp(repo, args[1]); //print full help text of a specific command
@@ -169,7 +165,8 @@ public class App {
 
     /**
      * Prints a short description of every command in the repository.
-     * @param repo 
+     *
+     * @param repo
      */
     private static void printHelp(CommandRepository repo) {
         for (int i = 0; i < repo.size(); i++) {
@@ -186,8 +183,9 @@ public class App {
 
     /**
      * Prints the help text for a specific command.
+     *
      * @param repo
-     * @param cmdName 
+     * @param cmdName
      */
     private static void printHelp(CommandRepository repo, String cmdName) {
         if (cmdName.equalsIgnoreCase(CMD_HELP)) { //if help for help is wanted
@@ -205,10 +203,13 @@ public class App {
 
     /**
      * Prints a list of all commands in repo.
-     * @param repo 
+     *
+     * @param repo
      */
     private static void printCommandList(CommandRepository repo) {
         String[] arr = repo.getCommandList();
+        System.out.println("Commands:");
+        System.out.println("--");
         for (int i = 0; i < arr.length; i++) {
             System.out.println(arr[i]);
         }
@@ -217,7 +218,8 @@ public class App {
 
     /**
      * Prints and formats a usage error message.
-     * @param message 
+     *
+     * @param message
      */
     private static void printUsageError(String message) {
         System.out.println("Usage error: " + message);
@@ -225,7 +227,8 @@ public class App {
 
     /**
      * Prints and formats a system error message.
-     * @param message 
+     *
+     * @param message
      */
     private static void printSystemError(String message) {
         System.out.println("Application error: " + message);

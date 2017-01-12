@@ -41,8 +41,8 @@ import org.openrdf.rio.RDFHandlerException;
 public class RenamePropertyCommand implements ICMD {
 
     private String NAME = "renameproperty";
-    private String EXPLANATION = "Replaces properties with other properties.";
-    private String HELPTEXT = "Usage: " + NAME + " <infile> <outfile> <property> <substitute> [<property> <substitute>...] \n" + EXPLANATION;
+    private String EXPLANATION = "Renames properties.";
+    private String HELPTEXT = "Usage: " + NAME + " <input file> <output file> <property> <substitute> [<property> <substitute>...] \n" + EXPLANATION;
     private Map<String, String> map = null;
 
     public RenamePropertyCommand() {
