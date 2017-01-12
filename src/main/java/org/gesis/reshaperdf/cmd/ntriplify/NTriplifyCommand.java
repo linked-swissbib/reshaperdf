@@ -49,8 +49,8 @@ import org.openrdf.rio.helpers.NTriplesParserSettings;
 public class NTriplifyCommand implements ICMD {
 
     public String NAME = "ntriplify";
-    public String EXPLANATION = "Takes an input directory and merges all RDF files into an NTriples file.";
-    public String HELPTEXT = "Usage: ntriplify <input dir> <outfile> [<JSON-LD context path> <JSON-LD context file>][...] \nTakes an input directory and merges all RDF files into an NTriples file.";
+    public String EXPLANATION = "Converts all RDF files from a directory into N-Triples and merges them into a single file.";
+    public String HELPTEXT = "Usage: "+NAME+" <input dir> <output file> [<JSON-LD context path> <JSON-LD context file>][...] \n"+EXPLANATION;
 
     @Override
     public String getName() {

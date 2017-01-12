@@ -34,8 +34,8 @@ import org.openrdf.rio.RDFHandlerException;
 public class MergeDirCommand implements ICMD {
 
     public String NAME = "mergedir";
-    public String EXPLANATION = "Merges NTriple files that are in the same directory.";
-    public String HELPTEXT = "Usage: mergedir <indir> <outfile>  \nMerges a NTriple files that are in the same directory.";
+    public String EXPLANATION = "Merges N-Triple files that are in the same directory.";
+    public String HELPTEXT = "Usage: "+NAME+" <input dir> <output file>  \n"+EXPLANATION;
 
     public MergeDirCommand() {
 

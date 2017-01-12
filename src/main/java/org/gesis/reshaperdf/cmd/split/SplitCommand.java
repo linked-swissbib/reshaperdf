@@ -33,8 +33,8 @@ import org.openrdf.rio.RDFHandlerException;
 public class SplitCommand implements ICMD {
 
     public String NAME = "split";
-    public String EXPLANATION = "Splits an NTriple file into several smaller, with a given number of resources.";
-    public String HELPTEXT = "Usage: split <infile> <outfile prefix> <resources per file>\n"+EXPLANATION;
+    public String EXPLANATION = "Splits a sorted N-Triple file into several smaller files, with a given number of resources.";
+    public String HELPTEXT = "Usage: "+NAME+" <input file> <output file prefix> <resources per file>\n"+EXPLANATION;
     public int linesPerFile = 1000000;
 
     @Override

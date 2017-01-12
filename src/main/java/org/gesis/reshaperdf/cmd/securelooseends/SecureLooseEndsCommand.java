@@ -57,7 +57,7 @@ public class SecureLooseEndsCommand implements ICMD {
     private String NAME = "securelooseends";
     private String EXPLANATION = "Extracts resources from file B that are referenced in file A. "
             + "Then reduces this resource to a meaningful string and adds it to the original resource.";
-    private String HELPTEXT = "Usage: " + NAME + " <file A> <file B> <outfile> <predicate1> <substitue1>[<predicate2> ...] \n" + EXPLANATION;
+    private String HELPTEXT = "Usage: " + NAME + " <file A> <file B> <output file> <predicate1> <substitue1>[<predicate2> ...] \n" + EXPLANATION;
 
     public SecureLooseEndsCommand() {
 

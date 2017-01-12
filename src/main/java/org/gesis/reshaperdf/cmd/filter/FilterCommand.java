@@ -40,8 +40,8 @@ import org.openrdf.rio.RDFHandlerException;
 public class FilterCommand implements ICMD {
 
     private static final String NAME = "filter";
-    private static final String EXPLANATION = "Removes statments from an N-Triple file.";
-    private static final String HELPTEXT = "Usage: " + NAME + " <whitelist|blacklist> <source file> <filter file> <outfile> \n" + EXPLANATION;
+    private static final String EXPLANATION = "Removes statments from an N-Triple file according to a white or blacklist.";
+    private static final String HELPTEXT = "Usage: " + NAME + " <whitelist|blacklist> <input file> <filter file> <output file> \n" + EXPLANATION;
 
     private static final String FILTER_TYPE_WHITELIST = "whitelist";
     private static final String FILTER_TYPE_BLACKLIST = "blacklist";

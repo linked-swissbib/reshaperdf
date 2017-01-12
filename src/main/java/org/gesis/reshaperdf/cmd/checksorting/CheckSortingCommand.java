@@ -35,7 +35,7 @@ import org.openrdf.model.Statement;
 public class CheckSortingCommand implements ICMD {
 
     public String NAME = "checksorting";
-    public String EXPLANATION = "Checks the sorting of an NTriple file.";
+    public String EXPLANATION = "Checks the input file for proper sorting. This sorting differs from plain line sorting in the fact that it ignores the control characters.";
     public String HELPTEXT = "Usage: " + NAME + " <infile> \n" + EXPLANATION;
 
     @Override

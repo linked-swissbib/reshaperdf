@@ -46,8 +46,9 @@ import org.openrdf.rio.RDFWriter;
 public class BlockCommand implements ICMD {
 
     private String NAME = "block";
-    private String EXPLANATION = "Splits the input data according to its literals alphabetic order.";
-    private String HELPTEXT = "Usage: " + NAME + " <infile> <outputdir> <predicate> <char offset> <char length>\n" + EXPLANATION;
+    private String EXPLANATION = "Assigns the resources of the input file to blocks according to a given character sequence of a given property's value. "
+            + "One block is one file. Files that exceed a statement count of 100 000 are further split into files of 100 000.";
+    private String HELPTEXT = "Usage: " + NAME + " <input file> <output dir> <predicate> <char offset> <char length>\n" + EXPLANATION;
 
     private Map<String, File> map = null;
 
@@ -125,7 +126,7 @@ public class BlockCommand implements ICMD {
             rpReader.removeHead();
 
             for (int i = 0; i < res.length; i++) {//iterate over all statements in a resource...
-                if (res[i].getPredicate().stringValue().equals(predicate)) {//if is right property....
+                if (res[i].getPredicate().stringValue().equals(predicate)) {//if is the wanted property....
                     String obj = res[i].getObject().stringValue();
                     if (obj.length() > 0) { //...process its object
                         String seq = null;

@@ -35,8 +35,8 @@ import org.gesis.reshaperdf.cmd.boundary.ICMD;
 public class RemoveDuplicatesCommand implements ICMD {
 
     public String NAME = "removeduplicates";
-    public String EXPLANATION = "Removes duplicate lines from an NTriples file.";
-    public String HELPTEXT = "Usage: " + NAME + " <infile> <outfile>\n" + EXPLANATION;
+    public String EXPLANATION = "Removes duplicate statements from a sorted N-Triples file.";
+    public String HELPTEXT = "Usage: " + NAME + " <input file> <output file>\n" + EXPLANATION;
 
     public RemoveDuplicatesCommand() {
 

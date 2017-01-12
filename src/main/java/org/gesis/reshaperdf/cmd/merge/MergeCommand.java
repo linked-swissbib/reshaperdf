@@ -32,8 +32,8 @@ import org.openrdf.rio.RDFHandlerException;
 public class MergeCommand implements ICMD {
 
     private static final String NAME = "merge";
-    private static final String EXPLANATION = "Merges a couple of sorted N-Triple files.";
-    private static final String HELPTEXT = "Usage: merge <outfile> <infile1> <infile2> [<infile3>...]\nMerges a couple of sorted NTriple files.";
+    private static final String EXPLANATION = "Merges multiple sorted N-Triple files.";
+    private static final String HELPTEXT = "Usage: "+NAME+" <outfile> <infile1> <infile2> [<infile3>...]\n"+EXPLANATION;
 
     public MergeCommand() {
 

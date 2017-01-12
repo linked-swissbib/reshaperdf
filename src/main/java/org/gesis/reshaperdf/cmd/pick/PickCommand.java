@@ -66,7 +66,7 @@ public class PickCommand implements ICMD {
             + "A " + WILDCARD + "-character can be used to indicate a wildcard."
             + "Example: infile.nt outfile.nt o subjectlist.txt predicatelist.txt" + WILDCARD + " ;"
             + "this returns all objects whose statments match any combination of subjectlist and predicatelist. ";
-    private static String HELPTEXT = "Usage: " + NAME + " <infile> <outfile> <s|p|o|stmt|res> <s|list|"+WILDCARD+"> <p|list|"+WILDCARD+"> <o|list|"+WILDCARD+">"
+    private static String HELPTEXT = "Usage: " + NAME + " <input file> <output file> <s|p|o|stmt|res> <s|list|"+WILDCARD+"> <p|list|"+WILDCARD+"> <o|list|"+WILDCARD+">"
             + "\n" + EXPLANATION;
 
     private static final int ARG_CMD = 0;
