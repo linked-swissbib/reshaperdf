@@ -40,8 +40,10 @@ import org.openrdf.rio.ntriples.NTriplesParser;
 public class PumpupCommand implements ICMD {
 
     public String NAME = "pumpup";
-    public String EXPLANATION = "Extends the namespaces in an NTriple file to thier long forms.";
-    public String HELPTEXT = "Usage: pumpup <infile> <outfile>\n" + EXPLANATION;
+    public String EXPLANATION = "Extends the namespaces in an N-Triples file to thier long forms. Uses the namespaces as stated below. "
+            + "The file \"namespaces.txt\" specifying these namespaces comes along with the binaries and can be adapted to custom needs."
+            + "Often commands already include this functionality.";
+    public String HELPTEXT = "Usage: pumpup <input file> <output file>\n" + EXPLANATION;
 
     @Override
     public String getName() {

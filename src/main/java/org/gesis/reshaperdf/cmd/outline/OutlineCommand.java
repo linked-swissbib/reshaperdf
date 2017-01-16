@@ -50,7 +50,7 @@ public class OutlineCommand implements ICMD {
     private String NAME = "outlineresources";
     private String EXPLANATION = "Creates literal representations for each resource in a file. \n"
             + "The representation is mapped to a given property.";
-    private String HELPTEXT = "Usage: " + NAME + " <infile> <outfile> <target property>\n" + EXPLANATION;
+    private String HELPTEXT = "Usage: " + NAME + " <input file> <output file> <target property>\n" + EXPLANATION;
 
     public OutlineCommand() {
 

@@ -47,8 +47,9 @@ import org.openrdf.rio.helpers.StatementCollector;
  */
 public class ExtractDuplicateLinksCommand implements ICMD {
 
-    public String NAME = "extractduplicates";
-    public String EXPLANATION = "Extracts statements with duplicate subjects and objects.";
+    public String NAME = "extractduplicatelinks";
+    public String EXPLANATION = "Extracts statements that do not address their subject or target exclusively. "
+            + "Use case example: Find links in a link set that connect commodity-resources.";
     public String HELPTEXT = "Usage: " + NAME + " <infile> \n" + EXPLANATION;
 
     private static String TMP = ".tmp";

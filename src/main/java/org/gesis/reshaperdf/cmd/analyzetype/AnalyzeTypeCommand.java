@@ -42,8 +42,10 @@ public class AnalyzeTypeCommand implements ICMD, IResourceHandler {
     private static final String RDF_TYPE = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type";
 
     private String NAME = "analyzetype";
-    private String EXPLANATION = "Analyzes literal object variations for given propterties.";
-    private String HELPTEXT = "Usage: " + NAME + " <infile> <type-object> <predicate1> [<predicate2> ...] \n" + EXPLANATION;
+    private String EXPLANATION = "Counts the occurences of literal objects for one or more propertiesfor for a given rdf:type. When more than one "+
+"properties are used, the combinations of properties are counted as well. Output is written to a CSV file. The entries are ranked by their occurences.\n" +
+"Use case example: A ranking of most common first name and last name combinations for persons could be created.";
+    private String HELPTEXT = "Usage: " + NAME + " <input file> <type-object> <predicate1> [<predicate2> ...] \n" + EXPLANATION;
 
     private String type = null;
     private String[] predicateArr = null;

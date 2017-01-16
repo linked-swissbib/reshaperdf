@@ -49,7 +49,7 @@ public class PigeonholeCommand implements ICMD, IResourceHandler {
 
     private String NAME = "pigeonhole";
     private String EXPLANATION = "Pigeonholes the resources within a file according to the frequency of their attributes.";
-    private String HELPTEXT = "Usage: " + NAME + " <infile> <outfile A> <outfile B> <outfile C> <CSV> <total threshold>\n" + EXPLANATION;
+    private String HELPTEXT = "Usage: " + NAME + " <input file> <output file A> <output file B> <output file C> <CSV> <total threshold>\n" + EXPLANATION;
 
     private String type = null;
     private String[] predicateArr = null;
@@ -190,9 +190,9 @@ public class PigeonholeCommand implements ICMD, IResourceHandler {
         if (resCnt % 1000 == 0) {
             System.out.println("Handling resource " + resCnt);
         }
-        if (containsType(res, type)) {
+        if (containsType(res, type)) {  //type was read from CSV file
             String[][] values = new String[predicateArr.length][];
-            for (int i = 0; i < predicateArr.length; i++) {//for every requested predicate
+            for (int i = 0; i < predicateArr.length; i++) {//for every requested predicate, as read from the CSV file...
                 values[i] = getAllDistinctObjects(res, predicateArr[i]); //get the objects from the SNT infile
             }
             if (containsOneEmpty(values)) { //when a resource does not contain all the requested properties
@@ -210,14 +210,12 @@ public class PigeonholeCommand implements ICMD, IResourceHandler {
                     if (Collections.binarySearch(list, concat) >= 0) { //entry exists
                         try {
                             writerA.writeResource(res);
-                            break;
                         } catch (RDFHandlerException ex) {
                             System.err.println(ex);
                         }
                     } else { //entry does not exist
                         try {
                             writerB.writeResource(res);
-                            break;
                         } catch (RDFHandlerException ex) {
                             System.err.println(ex);
                         }

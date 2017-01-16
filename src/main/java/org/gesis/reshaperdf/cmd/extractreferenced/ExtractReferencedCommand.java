@@ -39,7 +39,7 @@ public class ExtractReferencedCommand implements ICMD {
 
     private String NAME = "extractreferenced";
     private String EXPLANATION = "Extracts resources from file B that are referenced in file A.";
-    private String HELPTEXT = "Usage: " + NAME + " <file A> <file B> <outfile> <predicate1> [<predicate2> ...] \n" + EXPLANATION;
+    private String HELPTEXT = "Usage: " + NAME + " <file A> <file B> <output file> <predicate1> [<predicate2> ...] \n" + EXPLANATION;
 
     public ExtractReferencedCommand() {
 

@@ -37,8 +37,8 @@ import org.gesis.reshaperdf.cmd.boundary.ICMD;
 public class CorrectCommand implements ICMD {
 
     public String NAME = "correct";
-    public String EXPLANATION = "Removes invalid ntriples from a given file";
-    public String HELPTEXT = "Usage: correct <infile> <outfile>\nRemoves invalid ntriples from a given file.";
+    public String EXPLANATION = "Removes invalid ntriples from a given file, respectively replaces invalid characters with the ?-character.";
+    public String HELPTEXT = "Usage: correct <input file> <output file>\n"+ EXPLANATION;
 
     @Override
     public String getName() {

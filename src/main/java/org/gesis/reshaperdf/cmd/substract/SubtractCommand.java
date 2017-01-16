@@ -34,7 +34,7 @@ public class SubtractCommand implements ICMD {
 
     private static final String NAME = "subtract";
     private static final String EXPLANATION = "Removes all statements from file A that are also in file B.";
-    private static final String HELPTEXT = "Usage: " + NAME + " <file A> <file B> <out file>\n" + EXPLANATION;
+    private static final String HELPTEXT = "Usage: " + NAME + " <file A> <file B> <output file>\n" + EXPLANATION;
 
     @Override
     public String getName() {
