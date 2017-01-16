@@ -12,11 +12,13 @@ A toolset to work with N-Triples
     </tr>
     <tr>
         <td>Last change:</td>
-        <td>10. Jan. 2016</td>
+        <td>16. Jan. 2016</td>
     </tr>
     <tr>
         <td>Please note:</td>
-        <td>This document may be incomplete.</td>
+        <td>This document is intended to provide help to get started with ReshapeRDF, nothing more.<br>
+	Its content is subject to change.
+    </td>
     </tr>
 </table>
 
@@ -81,7 +83,7 @@ efficiently organize and reshape their data without the need of a triplestore.
 
 ## Sorted N-Triples <a name="sec:sortedntriples"></a>
 When there is an RDF dump file to process, users cannot take for granted that
-stored resources are held together. This is especially true for the N-Triple
+stored resources are held together. This is especially true for the N-Triples
 file format but also applies for the RDF/XML file format that even provides a way to 
 cluster statement by syntax.
 At the same time resources within such files cannot be found efficiently without
@@ -91,7 +93,7 @@ occurences. Complex searches cannot be handled at all.
 To overcome these limitations this tool applies an intermediate file format to 
 be used by a given set of operations to organize data in a more flexible way.
 This format is "Sorted N-Triples" (SNT). These are, as the name already indicates, 
-alphabetically sorted [N-Triples](http://www.w3.org/2001/sw/RDFCore/ntriples/).
+alphabetically sorted [N-Triples](https://www.w3.org/TR/2014/REC-n-triples-20140225/).
 
 The following example depicts how SNTs can be used for an interlinking and 
 enrichment process.
@@ -112,6 +114,17 @@ datasets.
 Copy the JAR-Archive reshaperdf-1.0-SNAPSHOT.jar and the lib folder to a directory of your choice.
 The software requires at least JRE 1.7 .
 
+It is helpful to provide a script "reshaperdf" in /bin that facilitates the calls to the program.
+
+
+    #!/bin/bash
+    # Author:  John Smith
+    # Purpose: Facilitates calls to ReshapeRDF.
+    
+    java -jar reshaperdf-1.0-SNAPSHOT.jar $@
+
+ 
+
 ## Terms <a name="sec:terms"></a>
 
 * **triple and statement** In this application a triple and a statement as known from the RDF context are the same thing. They always fit in one line.
@@ -129,7 +142,7 @@ This chapter outlines the operations and their usage. A command can be called us
 
 The chapter is subdivided into a section that is about commands intended for 
 everyday use and a section about special commands that do not have a 
-purpose in everyday use but but become handy in exotic use cases.
+purpose in everyday use but become handy in exotic use cases.
 The special commands are available in their own branch.
 
 At no point any of the commands will overwrite an input file, 
@@ -202,7 +215,7 @@ Most commands require the long forms of a URI.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>checksorting &lt;infile&gt;</td>
+        <td>checksorting &lt;input file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -213,7 +226,7 @@ Most commands require the long forms of a URI.
         <td>Checks the input file for proper sorting. This sorting differs from line sorting in the fact that it ignores the control characters.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file, requires N-Triples.</td>
     </tr>
     <tr>
@@ -235,7 +248,7 @@ Most commands require the long forms of a URI.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>extractresources &lt;infile&gt; &lt;outfile&gt; &lt;predicate&gt; &lt;object&gt; &lt;offset&gt; &lt;length&gt;</td>
+        <td>extractresources &lt;input file&gt; &lt;output file&gt; &lt;predicate&gt; &lt;object&gt; &lt;offset&gt; &lt;length&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -246,11 +259,11 @@ Most commands require the long forms of a URI.
         <td>Extracts resources with a given predicate-object combination.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file, requires N-Triples.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>Name of the output file, the file with the extracted resources.</td>
     </tr>
     <tr>
@@ -296,7 +309,7 @@ See also [pick](#cmd:pick).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Removes statments from an N-Triple file accoringly to a white or black list.</td>
+        <td>Removes statments from an N-Triples file accoringly to a white or black list.</td>
     </tr>
     <tr>
         <td>Argument: whitelist|blacklist</td>
@@ -332,7 +345,7 @@ See also [pick](#cmd:pick).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>getenrichment &lt;linkfile&gt; &lt;resource file&gt; &lt;outfile&gt;</td>
+        <td>getenrichment &lt;linkfile&gt; &lt;resource file&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -351,7 +364,7 @@ See also [pick](#cmd:pick).
         <td>An SNT file containing the resources to be extracted.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>Name of the output file. The file containing the extracted resources.</td>
     </tr>
     <tr>
@@ -360,6 +373,7 @@ See also [pick](#cmd:pick).
     </tr>
 </table> 
 
+See also [extractreferenced](#cmd:extractreferenced).
 
 
 #### help <a name="cmd:help"></a>
@@ -405,7 +419,7 @@ See also [pick](#cmd:pick).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>merge &lt;outfile&gt; &lt;infile1&gt; &lt;infile2&gt; [&lt;infile3&gt;...]</td>
+        <td>merge &lt;output file&gt; &lt;input file1&gt; &lt;input file2&gt; [&lt;input file3&gt;...]</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -413,22 +427,22 @@ See also [pick](#cmd:pick).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Merges a couple of sorted NTriple files.</td>
+        <td>Merges a couple of sorted N-Triples files.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
-        <td>Argument: infile1</td>
+        <td>Argument: input file1</td>
         <td>An SNT file containing statements to be merged.</td>
     </tr>
     <tr>
-        <td>Argument: infile2</td>
+        <td>Argument: input file2</td>
         <td>Another SNT file containing statements to be merged.</td>
     </tr>
     <tr>
-        <td>Argument: infileN</td>
+        <td>Argument: input fileN</td>
         <td>Further optional SNT files containing statements to be merged.</td>
     </tr>
     <tr>
@@ -513,7 +527,7 @@ For a simple concatenation you may also try "$ cat *.nt > mergefile.nt" in a Lin
     </tr>
     <tr>
         <td>Output</td>
-        <td>An N-Triple file containing the converted statements.</td>
+        <td>An N-Triples file containing the converted statements.</td>
     </tr>
 </table> 
 
@@ -571,7 +585,7 @@ For a simple concatenation you may also try "$ cat *.nt > mergefile.nt" in a Lin
     </tr>
     <tr>
         <td>Output</td>
-        <td>An N-Triple file containing the output.</td>
+        <td>An N-Triples file containing the output.</td>
     </tr>
 </table> 
 
@@ -725,7 +739,7 @@ For a simple concatenation you may also try "$ cat *.nt > mergefile.nt" in a Lin
     </tr>
     <tr>
         <td>Description</td>
-        <td>Sorts an N-Triple file in ascending order of codepoints.</td>
+        <td>Sorts an N-Triples file in ascending order of codepoints.</td>
     </tr>
     <tr>
         <td>Argument: input file</td>
@@ -826,7 +840,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>Usage: analyzetype &lt;infile&gt; &lt;type&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
+        <td>Usage: analyzetype &lt;input file&gt; &lt;type&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -834,13 +848,13 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Counts the occurences of literal objects for a given rdf:type in combination with one or more properties. When more 
-            properties are used, the combinations of properties are counted as well. Output is written to a CSV file. Use case example:
-            a ranking of most common first name and last name combinations for persons could be created. 
+        <td>Counts the occurences of literal objects for one or more propertiesfor for a given rdf:type. When more than one 
+            properties are used, the combinations of properties are counted as well. Output is written to a CSV file. The entries are ranked by their occurences.
+			Use case example: A ranking of most common first name and last name combinations for persons could be created. 
             See also: <a href="#cmd:pigeonhole">pigeonhole</a></td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file, requires SNT.</td>
     </tr>
     <tr>
@@ -848,12 +862,16 @@ See also [checksorting](#cmd:checksorting).
         <td>The type of resource to be analyze e.g. foaf:Person</td>
     </tr>
     <tr>
-        <td>Argument: predicate</td>
+        <td>Argument: predicate1</td>
         <td>The property to examine. Requires long namespace version.</td>
+    </tr>
+	<tr>
+        <td>Argument: further predicates</td>
+        <td>Further predicates, requires long namespace version.</td>
     </tr>
     <tr>
         <td>Output</td>
-        <td>One or more CSV files, automatically named.</td>
+        <td>One CSV file for every property and combination of properties, names are chosen automatically.</td>
     </tr>
 </table> 
 
@@ -872,7 +890,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>correct &lt;infile&gt; &lt;outfile&gt;</td>
+        <td>correct &lt;input file&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -880,19 +898,19 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Removes invalid ntriples from a given file respectively Replaces invalid character with the ?-character. </td>
+        <td>Removes invalid triples from a given file, respectively replaces invalid characters with the ?-character. </td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file, requires N-Triples.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>Name of the output file.</td>
     </tr>
     <tr>
         <td>Output</td>
-        <td>An N-Triples file with corrected content.</td>
+        <td>An N-Triples file without the problematic triples.</td>
     </tr>
 </table> 
 
@@ -908,7 +926,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>extractduplicatelinks &lt;infile&gt;</td>
+        <td>extractduplicatelinks &lt;input file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -916,16 +934,17 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Extracts statements with duplicate subjects and objects. Useful in combination with the <a href="#cmd:subtract">subtract</a> command.</td>
+        <td>Extracts statements that do not address their subject or target exclusively. Use case example: Find owl#sameAs-links in a link set that connect commodity-resources, 
+		respectively identify such resources. Useful in combination with the <a href="#cmd:subtract">subtract</a> command.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file, requires SNT.</td>
     </tr>
     <tr>
         <td>Output</td>
-        <td>Two N-Triples files: subjects.nt contains all links that do not address their subject exclusively; 
-            objects.nt contains all links that do not address their objects exclusively.</td>
+        <td>Two N-Triples files: subjects.nt contains all statements that do not address their subject exclusively; 
+            objects.nt contains all statements that do not address their objects exclusively.</td>
     </tr>
 </table> 
 
@@ -941,7 +960,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td> extractreferenced &lt;file A&gt; &lt;file B&gt; &lt;outfile&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
+        <td>extractreferenced &lt;file A&gt; &lt;file B&gt; &lt;output file&gt; &lt;predicate1&gt; [&lt;predicate2&gt; ...]</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -949,7 +968,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Extracts resources from file B that are referenced in file A.</td>
+        <td>Extracts resources from file B that are referenced in file A. Missing resources in fileB are ignored.</td>
     </tr>
     <tr>
         <td>Argument: file A</td>
@@ -960,8 +979,8 @@ See also [checksorting](#cmd:checksorting).
         <td>A second input file containing the referenced resources. SNT required.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
-        <td>The name of the output file. This file will contain the extractes resources.</td>
+        <td>Argument: output file</td>
+        <td>The name of the output file. This file will contain the extracted resources.</td>
     </tr>
     <tr>
         <td>Output</td>
@@ -969,6 +988,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
 </table> 
 
+See also [getenrichment](#cmd:getenrichment).
 
 
 #### outline <a name="cmd:outline"></a>
@@ -982,7 +1002,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>outline &lt;infile&gt; &lt;outfile> &lt;target property></td>
+        <td>outline &lt;input file&gt; &lt;output file> &lt;target property></td>
     </tr>
     <tr>
         <td>Type</td>
@@ -992,14 +1012,14 @@ See also [checksorting](#cmd:checksorting).
         <td>Description</td>
         <td>Creates literal representations for each resource in a file. 
             The representation is mapped to a given property. 
-            See also: <a href="#cmd:securelooseends">securelooseends</a>  </td>
+        </td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file with the resource to be outlined. SNT required.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the file to store the output in.</td>
     </tr>
     <tr>
@@ -1007,7 +1027,7 @@ See also [checksorting](#cmd:checksorting).
         <td>The property to assign the outline to.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>Name of the file to store the output in.</td>
     </tr>
     <tr>
@@ -1016,6 +1036,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
 </table>
 
+See also: [securelooseends](#cmd:securelooseends).
 
 
 #### pigeonhole <a name="cmd:pigeonhole"></a>
@@ -1029,7 +1050,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>pigeonhole &lt;infile&gt; &lt;outfile A&gt; &lt;outfile B&gt; &lt;outfile C&gt; &lt;CSV&gt; &lt;total threshold&gt;></td>
+        <td>pigeonhole &lt;input file&gt; &lt;output file A&gt; &lt;output file B&gt; &lt;output file C&gt; &lt;CSV&gt; &lt;total threshold&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -1037,36 +1058,39 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Pigeonholes the resources within an SNT file according to the frequency of their attributes. 
-            A CSV file contains information about a resource of a certain type and their respective properties, 
-            combinations of these properties and their occurences. 
-            The CSV file is the output of the analyzetype command. The command reads through the CSV input, 
-            a threshold on the total column can be used to close out entries that are below this threshold. This reduces memory load.
-            While reading through the SNT input file the resources are examined. Their property-combinations
-            are looked up in the CSV table. If the resource does not contain all of the properties stated in the CSV then it is written to file C. 
-            If a properties combination has an entry in the table then the resource is written to file A. 
-            If a certain combination is not present in the table, then the resource is written to file B. 
-            See also: <a href="#cmd:analyzetype">analyzetype</a>.  </td>
+        <td>Extracts the resources from an SNT file according to the frequency of their attributes.
+            A CSV file, such as produced by <a href="#cmd:analyzetype">analyzetype</a>, is used to determine the necessary information.
+			The CSV file contains combinations of values (a single property is also considered a combination) 
+			of the covered properties together with a number "total" that indicates the number occurences of the combination in the input file.
+			The entries in this CSV file are sorted by this number. <br>
+			The command reads the CSV entries up until the threshold of the "total"-field is undershot. Then it aborts. <br>	
+			The command then reads the input file resource-wise and handles the resources: <br>
+			Their property-combinations are looked up in the CSV table. <br>
+            If a properties combination has an entry in the table then the resource is written to file A. <br>
+            If a certain combination is not present in the table, then the resource is written to file B. <br>
+			If the resource does not even contain all of the properties stated in the CSV file then it is written to file C.<br><br>
+			Thus the command extracts the resources of the top X most frequent properties combinations.
+         </td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The input file with the resources to be pigeonholed. SNT required.</td>
     </tr>
     <tr>
-        <td>Argument: outfile A</td>
+        <td>Argument: output file A</td>
         <td>The name of the file to store the output in.</td>
     </tr>
      <tr>
-        <td>Argument: outfile B</td>
+        <td>Argument: output file B</td>
         <td>The name of the file to store the output in.</td>
     </tr>
      <tr>
-        <td>Argument: outfile C</td>
+        <td>Argument: output file C</td>
         <td>The name of the file to store the output in.</td>
     </tr>
     <tr>
         <td>Argument: CSV</td>
-        <td>A CSV file containing the frequencies of the properties values. Same as the output of the analyzetype command.</td>
+        <td>A CSV file containing the frequencies of the properties values. Same as the output of the <a href="#cmd:analyzetype">analyzetype</a> command.</td>
     </tr>
     <tr>
         <td>Argument: total threshold</td>
@@ -1074,10 +1098,15 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Output</td>
-        <td>Three SNT files with the  resources of their category. (See above)</td>
+        <td>Three SNT files with the resources of their category.<br>
+		File A: Contains all resources that containing a property combination that is in the top x (limited by the threshold parameter) most frequent combinations.<br>
+		File B: Contains all resources that have values for the requested properties but do not reside in the top x combinations.<br>
+		File C: Contains the remaining resources.
+		</td>
     </tr>
 </table>
 
+Use together with [analyzetype](#cmd:analyzetype).
 
 
 #### pumpup <a name="cmd:pumpup"></a>
@@ -1091,7 +1120,7 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Usage</td>
-        <td>pumpup &lt;infile&gt; &lt;outfile&gt;</td>
+        <td>pumpup &lt;input file&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -1099,19 +1128,21 @@ See also [checksorting](#cmd:checksorting).
     </tr>
     <tr>
         <td>Description</td>
-        <td>Extends the namespaces in an NTriple file to thier long forms. Uses the namespaces as stated below.</td>
+        <td>Extends the namespaces in an N-Triples file to thier long forms. Uses the namespaces as stated below. 
+		The file "namespaces.txt" specifying these namespaces comes along with the binaries and can be adapted to custom needs. 
+		Often commands already include this functionality.</td>
     </tr>
     <tr>
-        <td>Argument: infile</td>
+        <td>Argument: input file</td>
         <td>The name of the input file, requires N-Triples.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>The name of the output file.</td>
     </tr>
     <tr>
         <td>Output</td>
-        <td>An N-Triple file containing the merged statements.</td>
+        <td>An N-Triples file containing the merged statements.</td>
     </tr>
 </table> 
 
@@ -1140,9 +1171,6 @@ List of namespaces with their respective short forms.
 
 
 
-
-
-
 #### subtract <a name="cmd:subtract"></a>
 
 <table border="1" style="width:100%">
@@ -1154,7 +1182,7 @@ List of namespaces with their respective short forms.
     </tr>
     <tr>
         <td>Usage</td>
-        <td>subtract &lt;file A&gt; &lt;file B&gt; &lt;out file&gt;</td>
+        <td>subtract &lt;file A&gt; &lt;file B&gt; &lt;output file&gt;</td>
     </tr>
     <tr>
         <td>Type</td>
@@ -1173,12 +1201,12 @@ List of namespaces with their respective short forms.
         <td>The name of the second file, requires SNT.</td>
     </tr>
     <tr>
-        <td>Argument: outfile</td>
+        <td>Argument: output file</td>
         <td>Name of the output file.</td>
     </tr>
     <tr>
         <td>Output</td>
-        <td>The resulting file with SNT.</td>
+        <td>The resulting file containing SNT.</td>
     </tr>
 </table> 
 
