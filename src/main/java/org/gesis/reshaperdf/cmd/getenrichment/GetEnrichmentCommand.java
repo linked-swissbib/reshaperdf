@@ -151,7 +151,7 @@ public class GetEnrichmentCommand implements ICMD {
 
                 //obj < subj
                 if (result < 0) {
-                    //ressource could not be found, another alphanum. greater one is already present
+                    //resource could not be found, another alphanum. greater one is already present
                     System.out.println("Resource #"+cnt+" not found: " + obj);
                     link = linkList.get(0);
                     obj = link.getObject().stringValue();
@@ -160,7 +160,7 @@ public class GetEnrichmentCommand implements ICMD {
                     continue;
                 } //obj == subj
                 else if (result == 0) {
-                    //ressource found -> extract
+                    //resource found -> extract
                     System.out.println("Found resource #" + cnt + " of " + max);
                     writeAndMerge(writer, res, link.getSubject().stringValue());
                     link = linkList.get(0);

@@ -124,7 +124,7 @@ public class App {
                 }
             } catch (CommandExecutionException ex) {
                 printSystemError(ex.getMessage());
-                System.exit(-1);
+                System.exit(-2);
             }
         }
         System.exit(0);
