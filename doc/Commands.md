@@ -43,6 +43,7 @@ A toolset to work with N-Triples
         * [pick](#cmd:pick)
         * [removeduplicates](#cmd:removeduplicates)
         * [renameproperty](#cmd:renameproperty)
+        * [restorebn](#cmd:restorebn)
         * [securelooseends](#cmd:securelooseends)
         * [sort](#cmd:sort)
         * [split](#cmd:split)
@@ -669,6 +670,42 @@ For a simple concatenation you may also try "$ cat *.nt > mergefile.nt" in a Lin
     </tr>
 </table> 
 
+
+#### restorebn <a name="cmd:restorebn"></a>
+
+<table border="1" style="width:100%">
+    <col width="20%">
+    <col width="80%">
+    <tr>
+        <td>Name</td>
+        <td>restorebn</td>
+    </tr>
+    <tr>
+        <td>Usage</td>
+        <td>restorebn &lt;input file&gt; &lt;output file&gt;</td>
+    </tr>
+    <tr>
+        <td>Type</td>
+        <td>Statement based</td>
+    </tr>
+    <tr>
+        <td>Description</td>
+        <td>Restores blank nodes within an N-Triples file that were transcripted e.g. by the ntriplify command.</td>
+    </tr>
+    <tr>
+        <td>Argument: input file</td>
+        <td>The name of the input file, requires N-Triples with long namespaces.</td>
+    </tr>
+    <tr>
+        <td>Argument: output file</td>
+        <td>The name of the output file.</td>
+    </tr>
+    <tr>
+        <td>Output</td>
+        <td>A copy of input file with restored blank nodes.</td>
+    </tr>
+</table> 
+See also [ntriplify](#cmd:ntriplify).
 
 #### securelooseends <a name="cmd:securelooseends"></a>
 
