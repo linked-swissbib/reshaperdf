@@ -18,6 +18,7 @@
 package org.gesis.reshaperdf;
 
 import org.gesis.reshaperdf.cmd.block.BlockCommand;
+import org.gesis.reshaperdf.cmd.block.restorebn.RestoreBlankNodesCommand;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionException;
 import org.gesis.reshaperdf.cmd.boundary.CommandExecutionResult;
 import org.gesis.reshaperdf.cmd.boundary.ICMD;
@@ -95,6 +96,7 @@ public class App {
         repo.add(new PickCommand());
         repo.add(new RemoveDuplicatesCommand());
         repo.add(new RenamePropertyCommand());
+        repo.add(new RestoreBlankNodesCommand());
         repo.add(new SecureLooseEndsCommand());
         repo.add(new SortCommand());
         repo.add(new SplitCommand());

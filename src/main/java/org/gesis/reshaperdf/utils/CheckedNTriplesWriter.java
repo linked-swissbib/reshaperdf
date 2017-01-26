@@ -37,6 +37,8 @@ import org.openrdf.rio.ntriples.NTriplesWriter;
  */
 public class CheckedNTriplesWriter extends NTriplesWriter {
 
+    public static final String DUMMY_URL = "http://null.gesis.org/";
+    
     private IStatementFilter filter = null;
     private boolean useBNodeTranscription = false;
     
@@ -102,12 +104,12 @@ public class CheckedNTriplesWriter extends NTriplesWriter {
             Resource subj = stmt.getSubject();
             if(subj instanceof BNode){
                 String subjStringValue = subj.stringValue().substring(2);
-                subj = new URIImpl("http://null.gesis.org/"+subjStringValue);
+                subj = new URIImpl(DUMMY_URL+subjStringValue);
             }
             Value obj = stmt.getObject();
             if(obj instanceof BNode){
                 String objStringValue = obj.stringValue().substring(2);
-                obj = new URIImpl("http://null.gesis.org/"+objStringValue);
+                obj = new URIImpl(DUMMY_URL+objStringValue);
             }
             return new StatementImpl(subj,stmt.getPredicate(),obj);
             
