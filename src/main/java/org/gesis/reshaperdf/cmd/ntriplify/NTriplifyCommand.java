@@ -110,7 +110,7 @@ public class NTriplifyCommand implements ICMD {
             ntriplesWriter = new CheckedNTriplesWriter(new FileOutputStream(outFile), new StrictStatementFilter(), true);
 
         } catch (FileNotFoundException ex) {
-            return new CommandExecutionResult(false, "Out file " + outFile.getAbsolutePath() + " was not found.");
+            throw new CommandExecutionException(ex);
         }
         for (int i = 0; i < inputFiles.length; i++) {
             System.out.println("#" + (i + 1) + " Processing " + inputFiles[i].getName());
@@ -135,20 +135,23 @@ public class NTriplifyCommand implements ICMD {
                     fis.close();
                 }
             } catch (JsonParseException ex) {
-                System.err.println("File: " + inputFiles[i] + " " + ex.getMessage());
+                System.err.println("File " + inputFiles[i] + ": " + ex.getMessage());
                 closeWriter(ntriplesWriter);
+                System.err.println("File " + inputFiles[i] + ": Aborted processing for this file.");
             } catch (RDFHandlerException ex) {
-                return new CommandExecutionResult(false, ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
+                throw new CommandExecutionException(ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
             } catch (FileNotFoundException ex) {
-                return new CommandExecutionResult(false, ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
+                throw new CommandExecutionException(ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
             } catch (IOException ex) {
-                return new CommandExecutionResult(false, ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
+                throw new CommandExecutionException(ex + " When processing file " + inputFiles[i].getAbsolutePath() + ".");
             } catch (RDFParseException ex) {
-                System.err.println("File: " + inputFiles[i] + " " + ex.getMessage());
+                System.err.println("File " + inputFiles[i] + ": " + ex.getMessage());
                 closeWriter(ntriplesWriter);
+                System.err.println("File " + inputFiles[i] + ": Aborted processing for this file.");
             } catch (JsonLdError ex) {
-                System.err.println("File: " + inputFiles[i] + " " + ex.getMessage());
+                System.err.println("File " + inputFiles[i] + ": " + ex.getMessage());
                 closeWriter(ntriplesWriter);
+                System.err.println("File " + inputFiles[i] + ": Aborted processing for this file.");
             } 
 
         }

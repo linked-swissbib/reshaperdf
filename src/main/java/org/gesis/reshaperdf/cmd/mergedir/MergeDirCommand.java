@@ -83,11 +83,11 @@ public class MergeDirCommand implements ICMD {
             File[] fileArr = FileFinder.findFiles(inDir, new String[]{"nt"});
             MergeUtils.merge(fileArr, outFile, null);
         } catch (FileNotFoundException ex) {
-            return new CommandExecutionResult(false, ex.toString());
+            throw new CommandExecutionException(ex);
         } catch (RDFHandlerException ex) {
-            return new CommandExecutionResult(false, ex.toString());
+            throw new CommandExecutionException(ex);
         } catch (IllegalArgumentException ex) {
-            return new CommandExecutionResult(false, ex.toString());
+            throw new CommandExecutionException(ex);
         }
         return new CommandExecutionResult(true);
 

@@ -440,9 +440,9 @@ public class PickCommand implements ICMD {
             }
             writer.endRDF();
         } catch (RDFHandlerException ex) {
-            Logger.getLogger(PickCommand.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CommandExecutionException(ex);
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(PickCommand.class.getName()).log(Level.SEVERE, null, ex);
+            throw new CommandExecutionException(ex);
         }
         return new CommandExecutionResult(true);
     }

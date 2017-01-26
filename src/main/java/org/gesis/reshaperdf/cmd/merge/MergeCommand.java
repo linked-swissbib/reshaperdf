@@ -84,11 +84,11 @@ public class MergeCommand implements ICMD {
             //use method from merge utils
             MergeUtils.merge(fileArr, outFile, null);
         } catch (FileNotFoundException ex) {
-            return new CommandExecutionResult(false, ex.toString());
+            throw new CommandExecutionException(ex);
         } catch (RDFHandlerException ex) {
-            return new CommandExecutionResult(false, ex.toString());
+            throw new CommandExecutionException(ex);
         } catch(IllegalArgumentException ex){
-            return new CommandExecutionResult(false, ex.toString());
+            throw new CommandExecutionException(ex);
         }
         return new CommandExecutionResult(true);
         
