@@ -1,7 +1,8 @@
 #target directories
 target/
 
-#ignore IntelliJ module files
+#ignore IntelliJ project files
+.idea/
 *.iml
 
 #ignore NetBeans files
@@ -10,3 +11,10 @@ nb-configuration.xml
 
 #ignore logs
 *.log
+
+# gradle
+gradle/
+.gradle/
+
+# builds
+build/
